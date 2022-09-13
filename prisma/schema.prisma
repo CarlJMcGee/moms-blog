@@ -97,7 +97,6 @@ model User {
     likedComments UserLikesComments[]
     accounts      Account[]
     sessions      Session[]
-    postId        String?
 }
 
 model VerificationToken {
