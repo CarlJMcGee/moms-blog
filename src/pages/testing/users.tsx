@@ -7,14 +7,21 @@ export interface IUserTestingProps {}
 export default function UserTesting(props: IUserTestingProps) {
   // state
   const [userSearch, setUserSearch] = React.useState("");
+  const [userData, setUser] = React.useState();
 
   const { data: users, isLoading: gettingUsers } = trpc.useQuery([
     "user.getAll",
   ]);
-  const { data: user, isLoading: findingUser } = trpc.useQuery([
-    "user.getOne",
-    { userId: userSearch },
-  ]);
+  const {
+    mutateAsync: findUser,
+    isLoading: findingUser,
+    data: user,
+  } = trpc.useMutation(["user.getOne"]);
+
+  const searchHandler = async function (e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    await findUser({ userId: userSearch });
+  };
 
   return (
     <div>
@@ -29,7 +36,7 @@ export default function UserTesting(props: IUserTestingProps) {
           <h2 className="text-3xl">All Users</h2>
           <ul>
             {users?.map((user) => (
-              <li>
+              <li key={user.id}>
                 <p>
                   <span className="font-bold">{user.name}</span>{" "}
                   {user.canPost ? "Can post" : "Cannot post"} and{" "}
@@ -41,7 +48,7 @@ export default function UserTesting(props: IUserTestingProps) {
         </>
       )}
       <br />
-      <form>
+      <form onSubmit={searchHandler}>
         <input
           type="text"
           className="border border-black rounded"
@@ -53,6 +60,13 @@ export default function UserTesting(props: IUserTestingProps) {
           Search
         </button>
       </form>
+      {user && (
+        <p>
+          <span className="font-bold">{user.name}</span>{" "}
+          {user.canPost ? "Can post" : "Cannot post"} and{" "}
+          {user.banned ? "is banned" : "is not banned"}
+        </p>
+      )}
     </div>
   );
 }

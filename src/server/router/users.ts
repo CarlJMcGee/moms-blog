@@ -12,7 +12,7 @@ export const userRouter = createRouter()
       return users;
     },
   })
-  .query("getOne", {
+  .mutation("getOne", {
     input: z.object({
       userId: z.string().trim(),
     }),
