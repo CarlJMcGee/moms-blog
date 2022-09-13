@@ -180,6 +180,17 @@ const UserTesting: NextPage = (props: IUserTestingProps) => {
       <br />
 
       <button onClick={() => signIn()}>Sign In</button>
+      <br />
+      <button
+        onClick={() =>
+          signIn("credentials", {
+            email: "ben@email.com",
+            password: "password",
+          })
+        }
+      >
+        sign in same page
+      </button>
     </div>
   );
 };
