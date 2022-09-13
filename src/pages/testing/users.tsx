@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import * as React from "react";
 import { userRouter } from "../../server/router/users";
@@ -15,6 +16,8 @@ const UserTesting: NextPage = (props: IUserTestingProps) => {
     password: "",
   });
   const [passToCheck, setPassToCheck] = React.useState({ email: "", pass: "" });
+
+  const { data: sess } = useSession();
 
   // query
   const { data: users, isLoading: gettingUsers } = trpc.useQuery([
@@ -55,6 +58,8 @@ const UserTesting: NextPage = (props: IUserTestingProps) => {
     e.preventDefault();
     await checkPass({ email: passToCheck.email, pass: passToCheck.pass });
   };
+
+  console.log(sess);
 
   return (
     <div>
@@ -171,6 +176,10 @@ const UserTesting: NextPage = (props: IUserTestingProps) => {
       ) : (
         <p className="text-red-600">Incorrect</p>
       )}
+
+      <br />
+
+      <button onClick={() => signIn()}>Sign In</button>
     </div>
   );
 };
