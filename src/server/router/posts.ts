@@ -16,6 +16,8 @@ export const PostRouter = createRouter()
             include: {
               user: true,
             },
+            take: 5,
+            orderBy: { createdAt: "desc" },
           },
           _count: {
             select: {

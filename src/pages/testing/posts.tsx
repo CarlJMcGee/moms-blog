@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { comment } from "postcss";
 import * as React from "react";
 import { util } from "zod/lib/helpers/util";
 import { trpc } from "../../utils/trpc";
@@ -22,6 +23,8 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
     imgLink: "",
     postId: "",
   });
+  const [commentBody, setCommentInfo] = React.useState("");
+  const commentInput = React.useRef<HTMLInputElement>(null);
   const { data: sess } = useSession();
 
   // query
@@ -42,6 +45,11 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
     },
   });
   const { mutate: removeLike } = trpc.useMutation(["post.removeLike"], {
+    onSuccess() {
+      utils.invalidateQueries(["post.getAll"]);
+    },
+  });
+  const { mutate: addComment } = trpc.useMutation(["comment.add"], {
     onSuccess() {
       utils.invalidateQueries(["post.getAll"]);
     },
@@ -70,6 +78,14 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
     e.preventDefault();
 
     removeLike({ postId: postId, userId: sess?.user?.id ?? "" });
+  };
+  const addCommentHandler = (
+    e: React.FormEvent<HTMLElement>,
+    postId: string
+  ) => {
+    e.preventDefault();
+
+    addComment({ postId: postId, content: commentBody });
   };
 
   return (
@@ -118,15 +134,29 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
                 </p>
                 <p>{post.content}</p>
                 {post.image ? <img width={"350px"} src={post.image} /> : ""}
+                <h4 className="font-semibold ">Thoughts?</h4>
+                <form onSubmit={(e) => addCommentHandler(e, post.id)}>
+                  <input
+                    className="bg-slate-300 m-2, p-1"
+                    type="text"
+                    placeholder="Comment"
+                    onChange={(e) => setCommentInfo(e.target.value)}
+                    ref={commentInput}
+                  />
+                  <button type="submit" className="bg-slate-300 m-2 p-1">
+                    Post
+                  </button>
+                </form>
                 {post?.commentsSafe[0] ? (
                   <>
-                    <h4 className="font-semibold ">Thoughts?</h4>
-                    <p>
-                      <span className="font-bold">
-                        {post.commentsSafe[0].userSafe.name}:{" "}
-                      </span>
-                      {post.commentsSafe[0].content}
-                    </p>
+                    {post.commentsSafe.map((comment) => (
+                      <p key={comment.id}>
+                        <span className="font-semibold">
+                          {comment.userSafe.name}:
+                        </span>{" "}
+                        {comment.content}
+                      </p>
+                    ))}
                   </>
                 ) : (
                   ""
