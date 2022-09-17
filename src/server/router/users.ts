@@ -10,7 +10,12 @@ export const userRouter = createRouter()
 
       const users = await User.findMany();
 
-      return users;
+      const usersSafe = users.map((user) => {
+        const { password, ...userSafe } = user;
+        return userSafe;
+      });
+
+      return usersSafe;
     },
   })
   .mutation("getOne", {
@@ -39,7 +44,24 @@ export const userRouter = createRouter()
         });
       }
 
-      return user;
+      const { password, ...userSafe } = user;
+      return userSafe;
+    },
+  })
+  .query("me", {
+    async resolve({ ctx }) {
+      const me = await ctx.prisma.user.findUniqueOrThrow({
+        where: { id: ctx.session?.user?.id },
+        include: {
+          posts: true,
+          likedPosts: true,
+          comments: true,
+          likedComments: true,
+        },
+      });
+
+      const { password, ...meSafe } = me;
+      return meSafe;
     },
   })
   .mutation("addUser", {
@@ -62,7 +84,9 @@ export const userRouter = createRouter()
         },
       });
 
-      return newUser;
+      const { password: pass, ...newUserSafe } = newUser;
+
+      return newUserSafe;
     },
   })
   .mutation("loginTemp", {

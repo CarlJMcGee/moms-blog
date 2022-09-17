@@ -17,10 +17,28 @@ export const PostRouter = createRouter()
               user: true,
             },
           },
+          _count: {
+            select: {
+              userLikes: true,
+            },
+          },
         },
       });
 
-      return posts;
+      const postsSafe = posts.map((post) => {
+        const { user, comments, ...postdata } = post;
+        const { password, ...userSafe } = user;
+        const commentsSafe = comments.map((comment) => {
+          const {
+            user: { password, ...userSafe },
+            ...commentData
+          } = comment;
+          return { userSafe, ...commentData };
+        });
+        return { userSafe, commentsSafe, ...postdata };
+      });
+
+      return postsSafe;
     },
   })
   .mutation("new", {
@@ -47,6 +65,7 @@ export const PostRouter = createRouter()
           userId: ctx.session.user.id ?? "",
         },
       });
+
       return newPost;
     },
   })
@@ -70,9 +89,6 @@ export const PostRouter = createRouter()
         where: {
           id: postId,
         },
-        include: {
-          user: true,
-        },
       });
 
       if (ctx.session?.user?.id !== update.userId) {
@@ -81,5 +97,61 @@ export const PostRouter = createRouter()
           message: `User is not logged in!`,
         });
       }
+
+      return `User updated post`;
+    },
+  })
+  .mutation("addLike", {
+    input: z.object({
+      userId: z.string().trim(),
+      postId: z.string().trim(),
+    }),
+    async resolve({ ctx, input }) {
+      const Likes = ctx.prisma.usersLikedPosts;
+      const { postId, userId } = input;
+
+      const likePost = await Likes.create({
+        data: {
+          postId: postId,
+          userId: userId,
+        },
+      });
+
+      if (!likePost) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "like post operation failed",
+        });
+      }
+
+      return `User liked post`;
+    },
+  })
+  .mutation("removeLike", {
+    input: z.object({
+      userId: z.string().trim(),
+      postId: z.string().trim(),
+    }),
+    async resolve({ ctx, input }) {
+      const Likes = ctx.prisma.usersLikedPosts;
+      const { postId, userId } = input;
+
+      const likePost = await Likes.delete({
+        where: {
+          userId_postId: {
+            postId: postId,
+            userId: userId,
+          },
+        },
+      });
+
+      if (!likePost) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "remove post operation failed",
+        });
+      }
+
+      return `User unliked post`;
     },
   });

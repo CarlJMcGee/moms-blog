@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import * as React from "react";
+import { util } from "zod/lib/helpers/util";
 import { trpc } from "../../utils/trpc";
 
 export interface IPostTestingProps {}
@@ -15,15 +16,32 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
     content: "",
     imgLink: "",
   });
+  const [postUpdate, setPostUpdate] = React.useState({
+    title: "",
+    content: "",
+    imgLink: "",
+    postId: "",
+  });
   const { data: sess } = useSession();
 
   // query
   const { data: posts, isLoading: gettingPosts } = trpc.useQuery([
     "post.getAll",
   ]);
+  const { data: me } = trpc.useQuery(["user.me"]);
 
   // mutation
   const { mutate: addPost, data: newPost } = trpc.useMutation(["post.new"], {
+    onSuccess() {
+      utils.invalidateQueries(["post.getAll"]);
+    },
+  });
+  const { mutate: addLike } = trpc.useMutation(["post.addLike"], {
+    onSuccess() {
+      utils.invalidateQueries(["post.getAll"]);
+    },
+  });
+  const { mutate: removeLike } = trpc.useMutation(["post.removeLike"], {
     onSuccess() {
       utils.invalidateQueries(["post.getAll"]);
     },
@@ -36,6 +54,22 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
     addPost({ ...postInfo });
 
     setPostInfo({ title: "", content: "", imgLink: "" });
+  };
+  const likePostHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    postId: string
+  ) => {
+    e.preventDefault();
+
+    addLike({ postId: postId, userId: sess?.user?.id ?? "" });
+  };
+  const unlikePostHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    postId: string
+  ) => {
+    e.preventDefault();
+
+    removeLike({ postId: postId, userId: sess?.user?.id ?? "" });
   };
 
   return (
@@ -52,18 +86,46 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
           <ul className="flex">
             {posts?.map((post) => (
               <li key={post.id} className="border-4 m-2 p-4">
-                <h3 className="font-bold text-xl">{post.title}</h3>
-                <h4>Says {post.user.name}</h4>
+                <h3 className="font-bold text-xl">
+                  {post.title}{" "}
+                  {post.userSafe.id === sess?.user?.id && (
+                    <button className="bg-slate-300 m-2 p-1 font-normal text-sm">
+                      Update
+                    </button>
+                  )}
+                </h3>
+
+                <h4>Says {post.userSafe.name}</h4>
+                <p>
+                  {post._count.userLikes ?? "0"} Likes{" "}
+                  {sess?.user &&
+                    sess?.user?.id !== post.userId &&
+                    (me?.likedPosts.find((post) => post.postId) ? (
+                      <button
+                        className="bg-blue-300 m-2 p-1"
+                        onClick={(e) => unlikePostHandler(e, post.id)}
+                      >
+                        Unlike
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-300 m-2 p-1"
+                        onClick={(e) => likePostHandler(e, post.id)}
+                      >
+                        Like
+                      </button>
+                    ))}
+                </p>
                 <p>{post.content}</p>
                 {post.image ? <img width={"350px"} src={post.image} /> : ""}
-                {post?.comments[0] ? (
+                {post?.commentsSafe[0] ? (
                   <>
                     <h4 className="font-semibold ">Thoughts?</h4>
                     <p>
                       <span className="font-bold">
-                        {post.comments[0].user.name}:{" "}
+                        {post.commentsSafe[0].userSafe.name}:{" "}
                       </span>
-                      {post.comments[0].content}
+                      {post.commentsSafe[0].content}
                     </p>
                   </>
                 ) : (
