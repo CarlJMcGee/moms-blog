@@ -52,16 +52,20 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
           <ul className="flex">
             {posts?.map((post) => (
               <li key={post.id} className="border-4 m-2 p-4">
-                <h3 className="font-bold">{post.title}</h3>
+                <h3 className="font-bold text-xl">{post.title}</h3>
+                <h4>Says {post.user.name}</h4>
                 <p>{post.content}</p>
                 {post.image ? <img width={"350px"} src={post.image} /> : ""}
                 {post?.comments[0] ? (
-                  <p>
-                    <span className="font-bold">
-                      {post.comments[0].user.name}:{" "}
-                    </span>
-                    {post.comments[0].content}
-                  </p>
+                  <>
+                    <h4 className="font-semibold ">Thoughts?</h4>
+                    <p>
+                      <span className="font-bold">
+                        {post.comments[0].user.name}:{" "}
+                      </span>
+                      {post.comments[0].content}
+                    </p>
+                  </>
                 ) : (
                   ""
                 )}

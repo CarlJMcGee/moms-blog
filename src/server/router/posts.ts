@@ -49,4 +49,37 @@ export const PostRouter = createRouter()
       });
       return newPost;
     },
+  })
+  .mutation("update", {
+    input: z.object({
+      postId: z.string().trim(),
+      title: z.string().trim(),
+      content: z.string().trim(),
+      imgLink: z.string().trim(),
+    }),
+    async resolve({ ctx, input }) {
+      const Post = ctx.prisma.post;
+      const { title, content, imgLink, postId } = input;
+
+      const update = await Post.update({
+        data: {
+          title: title,
+          content: content,
+          image: imgLink,
+        },
+        where: {
+          id: postId,
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      if (ctx.session?.user?.id !== update.userId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: `User is not logged in!`,
+        });
+      }
+    },
   });
