@@ -41,6 +41,27 @@ export const PostRouter = createRouter()
       return postsSafe;
     },
   })
+  .mutation("getOne", {
+    input: z.object({
+      postId: z.string().trim(),
+    }),
+    async resolve({ ctx, input }) {
+      const post = await ctx.prisma.post.findUniqueOrThrow({
+        where: {
+          id: input.postId,
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      const {
+        user: { password, ...userSafe },
+        ...postData
+      } = post;
+      return { userSafe, ...postData };
+    },
+  })
   .mutation("new", {
     input: z.object({
       title: z.string().trim(),
