@@ -7,6 +7,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 
 import bcrypt from "bcrypt";
+import { toSeconds } from "../../../utils/time";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -67,6 +68,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
+    maxAge: toSeconds(0, 2),
   },
 };
 
