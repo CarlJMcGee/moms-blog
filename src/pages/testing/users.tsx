@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import * as React from "react";
 import { userRouter } from "../../server/router/users";
@@ -46,11 +46,21 @@ const UserTesting: NextPage = (props: IUserTestingProps) => {
   };
   const addUserHandler = async function (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await addUser({
-      username: newUserInfo.username,
-      email: newUserInfo.email,
-      password: newUserInfo.password,
-    });
+    await addUser(
+      {
+        username: newUserInfo.username,
+        email: newUserInfo.email,
+        password: newUserInfo.password,
+      },
+      {
+        onSuccess() {
+          signIn("credentials", {
+            email: newUserInfo.email,
+            password: newUserInfo.password,
+          });
+        },
+      }
+    );
   };
   const passCheckHandler = async function (
     e: React.FormEvent<HTMLFormElement>
@@ -58,8 +68,6 @@ const UserTesting: NextPage = (props: IUserTestingProps) => {
     e.preventDefault();
     await checkPass({ email: passToCheck.email, pass: passToCheck.pass });
   };
-
-  console.log(sess);
 
   return (
     <div>
@@ -179,18 +187,11 @@ const UserTesting: NextPage = (props: IUserTestingProps) => {
 
       <br />
 
-      <button onClick={() => signIn()}>Sign In</button>
-      <br />
-      <button
-        onClick={() =>
-          signIn("credentials", {
-            email: "ben@email.com",
-            password: "password",
-          })
-        }
-      >
-        sign in same page
-      </button>
+      {sess?.user ? (
+        <button onClick={() => signOut()}>Sign Out</button>
+      ) : (
+        <button onClick={() => signIn()}>Sign In</button>
+      )}
     </div>
   );
 };
