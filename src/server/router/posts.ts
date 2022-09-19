@@ -11,10 +11,20 @@ export const PostRouter = createRouter()
         orderBy: { updatedAt: "desc" },
         take: 10,
         include: {
-          user: true,
+          user: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
           comments: {
             include: {
-              user: true,
+              user: {
+                select: {
+                  name: true,
+                  id: true,
+                },
+              },
             },
             take: 5,
             orderBy: { createdAt: "desc" },
@@ -27,20 +37,7 @@ export const PostRouter = createRouter()
         },
       });
 
-      const postsSafe = posts.map((post) => {
-        const { user, comments, ...postdata } = post;
-        const { password, ...userSafe } = user;
-        const commentsSafe = comments.map((comment) => {
-          const {
-            user: { password, ...userSafe },
-            ...commentData
-          } = comment;
-          return { userSafe, ...commentData };
-        });
-        return { userSafe, commentsSafe, ...postdata };
-      });
-
-      return postsSafe;
+      return posts;
     },
   })
   .mutation("getOne", {

@@ -104,14 +104,14 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
               <li key={post.id} className="border-4 m-2 p-4">
                 <h3 className="font-bold text-xl">
                   {post.title}{" "}
-                  {post.userSafe.id === sess?.user?.id && (
+                  {post.user.id === sess?.user?.id && (
                     <button className="bg-slate-300 m-2 p-1 font-normal text-sm">
                       Update
                     </button>
                   )}
                 </h3>
 
-                <h4>Says {post.userSafe.name}</h4>
+                <h4>Says {post.user.name}</h4>
                 <p>
                   {post._count.userLikes ?? "0"} Likes{" "}
                   {sess?.user &&
@@ -147,12 +147,12 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
                     Post
                   </button>
                 </form>
-                {post?.commentsSafe[0] ? (
+                {post?.comments[0] ? (
                   <>
-                    {post.commentsSafe.map((comment) => (
+                    {post.comments.map((comment) => (
                       <p key={comment.id}>
                         <span className="font-semibold">
-                          {comment.userSafe.name}:
+                          {comment.user.name}:
                         </span>{" "}
                         {comment.content}
                       </p>

@@ -50,6 +50,10 @@ export const userRouter = createRouter()
   })
   .query("me", {
     async resolve({ ctx }) {
+      if (!ctx.session?.user) {
+        return undefined;
+      }
+
       const me = await ctx.prisma.user.findUniqueOrThrow({
         where: { id: ctx.session?.user?.id },
         include: {
