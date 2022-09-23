@@ -1,8 +1,8 @@
-import { Comment, Post, User } from "@prisma/client";
-import { Session } from "next-auth";
 import * as React from "react";
-import { PostFull } from "../../types/trpc-models";
+import { Session } from "next-auth";
+import { PostFull, UserFull } from "../../types/trpc-models";
 import { trpc } from "../../utils/trpc";
+import { Card, Image, Text, Title, Button, Group } from "@mantine/core";
 
 export interface IPostCardProps {
   post: PostFull | undefined;
@@ -11,18 +11,38 @@ export interface IPostCardProps {
 
 const PostCard = ({ post, sess }: IPostCardProps) => {
   // query
-  const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
+  let user = undefined;
+  if (sess?.user) {
+    const { data, isLoading: userLoading } = trpc.useQuery(["user.me"]);
+    user = data || ({} as UserFull);
+  }
 
   if (!post) {
     return <h2>Post not found</h2>;
   }
 
   return (
-    <div>
-      <h3 className="text-xl font-semibold">{post.title}</h3>
-      <h4 className="text-sm">{`Says ${post.user.name}`}</h4>
-      <p>{post.content}</p>
-      {post.image && <img src={post.image} alt={`post ${post.title} image`} />}
+    <Card shadow={"xl"} p="lg" withBorder className="w-96 m-5">
+      <Card.Section>
+        <Title order={2} className="px-3 pt-3">
+          {post.title}
+        </Title>
+        <Text
+          size={"lg"}
+          weight=""
+          className="px-3"
+        >{`Says ${post.user.name}`}</Text>
+      </Card.Section>
+      <Group position="center" mt={"lg"} mb={"xs"}>
+        <Text size={"md"} weight="lighter">
+          {post.content}
+        </Text>
+      </Group>
+      {post.image && (
+        <Card.Section>
+          <Image src={post.image} alt={`post ${post.title} image`} />
+        </Card.Section>
+      )}
       {post.comments.map((comment) => (
         <div key={comment.id}>
           <h4 className="font-semibold">{comment.user.name}</h4>
@@ -30,7 +50,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
           <p>{comment.content}</p>
         </div>
       ))}
-    </div>
+    </Card>
   );
 };
 

@@ -24,13 +24,13 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Blog</title>
+        <title>Sanity Adjacent</title>
         <meta name="description" content={`Words of "wisdom" daily`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="box-border">
-        <h1 className="text-4xl font-bold text-center">Blog v0.1</h1>
+        <h1 className="text-4xl font-bold text-left">Sanity Adjacent</h1>
         <div className="text-center my-3 border-4 w-1/2 mx-auto">
           <h3 className="text-2xl font-semibold">{posts[0]?.title}</h3>
           <h4>{posts[0]?.user.name}</h4>
