@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Header from "../components/header";
 import PostCard from "../components/post-cards";
 import { trpc } from "../utils/trpc";
 
@@ -30,7 +31,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="box-border">
-        <h1 className="text-4xl font-bold text-left">Sanity Adjacent</h1>
+        <Header />
         <div className="text-center my-3 border-4 w-1/2 mx-auto">
           <h3 className="text-2xl font-semibold">{posts[0]?.title}</h3>
           <h4>{posts[0]?.user.name}</h4>
