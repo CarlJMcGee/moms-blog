@@ -31,7 +31,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="box-border">
-        <Header />
+        <Header sess={sess} />
         <div className="text-center my-3 border-4 w-1/2 mx-auto">
           <h3 className="text-2xl font-semibold">{posts[0]?.title}</h3>
           <h4>{posts[0]?.user.name}</h4>
