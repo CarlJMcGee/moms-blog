@@ -48,6 +48,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
     e.preventDefault();
 
     addComment({ content: comment, postId: post.id });
+    setComment("");
   };
 
   return (
@@ -89,6 +90,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
                     <Input
                       placeholder="Thoughts..."
                       className="pl-0"
+                      value={comment}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setComment(e.target.value)
                       }
