@@ -1,3 +1,4 @@
+import { Box, Button, Group } from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
@@ -32,22 +33,16 @@ const Home: NextPage = () => {
 
       <main className="box-border">
         <Header sess={sess} />
-        <div className="text-center my-3 border-4 w-1/2 mx-auto">
-          <h3 className="text-2xl font-semibold">{posts[0]?.title}</h3>
-          <h4>{posts[0]?.user.name}</h4>
-          <p>Says {posts[0]?.content}</p>
-          {posts[0]?.image && (
-            <img src={posts[0].image} alt={`Top post image`} width="500px" />
-          )}
-        </div>
-
-        <br />
 
         <ol className="flex flex-col items-center">
           {posts.map((post) => (
             <PostCard key={post.id} post={post} sess={sess} />
           ))}
         </ol>
+
+        <Button className="bg-sky-700 fixed bottom-10 left-3 w-1/4">
+          New Thought
+        </Button>
       </main>
     </>
   );
