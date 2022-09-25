@@ -15,7 +15,7 @@ import {
   Spoiler,
   Paper,
 } from "@mantine/core";
-import { IconSquareArrowRight } from "@tabler/icons";
+import { IconSquareArrowRight, IconStar } from "@tabler/icons";
 import moment from "moment";
 
 export interface IPostCardProps {
@@ -65,14 +65,21 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
         <Title order={2} className="px-3 pt-3">
           {post.title}
         </Title>
-        <Text
-          size={"lg"}
-          weight=""
-          className="px-5"
-        >{`Says ${post.user.name}`}</Text>
-        <Text size={"sm"} className="px-5">
-          {postTime}
-        </Text>
+        <Group position="apart">
+          <div>
+            <Text
+              size={"lg"}
+              weight=""
+              className="px-5"
+            >{`Says ${post.user.name}`}</Text>
+            <Text size={"sm"} className="px-5">
+              {postTime}
+            </Text>
+          </div>
+          <ActionIcon color={"yellow"} size={"lg"} mr="lg" variant="filled">
+            <IconStar size={34} color="#e7bc27" />
+          </ActionIcon>
+        </Group>
       </Card.Section>
 
       {/* post content and image */}
