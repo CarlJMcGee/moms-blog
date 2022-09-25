@@ -29,7 +29,7 @@ export default function Header({ sess }: IHeaderProps) {
               <Button
                 variant="filled"
                 color={"violet"}
-                className="bg-violet-300"
+                className="bg-purple-700"
                 onClick={() => signIn()}
               >
                 Log in
@@ -37,7 +37,7 @@ export default function Header({ sess }: IHeaderProps) {
               <Button
                 variant="filled"
                 color={"violet"}
-                className="bg-violet-300"
+                className="bg-purple-700"
                 onClick={() => setDrawer(true)}
               >
                 Sign Up
@@ -70,7 +70,7 @@ export default function Header({ sess }: IHeaderProps) {
               <Button
                 variant="filled"
                 color={"violet"}
-                className="bg-purple-400"
+                className="bg-purple-700"
               >
                 {sess?.user?.name}
               </Button>
@@ -80,7 +80,7 @@ export default function Header({ sess }: IHeaderProps) {
                 <Button
                   variant="filled"
                   color={"violet"}
-                  className="bg-violet-300"
+                  className="bg-purple-700"
                   onClick={() => signOut()}
                 >
                   Logout
