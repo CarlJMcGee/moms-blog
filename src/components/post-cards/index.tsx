@@ -12,8 +12,11 @@ import {
   Accordion,
   Input,
   ActionIcon,
+  Spoiler,
+  Paper,
 } from "@mantine/core";
 import { IconSquareArrowRight } from "@tabler/icons";
+import moment from "moment";
 
 export interface IPostCardProps {
   post: PostFull | undefined;
@@ -51,6 +54,10 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
     setComment("");
   };
 
+  // wibbly wobbly timey wimey
+  const postTime = moment(post.comments[0]?.createdAt).fromNow();
+  const commentTime = (date: Date | undefined) => moment(date).fromNow();
+
   return (
     <Card shadow={"xl"} p="lg" withBorder className="w-96 m-5">
       {/* title and user */}
@@ -63,6 +70,9 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
           weight=""
           className="px-5"
         >{`Says ${post.user.name}`}</Text>
+        <Text size={"sm"} className="px-5">
+          {postTime}
+        </Text>
       </Card.Section>
 
       {/* post content and image */}
@@ -79,48 +89,60 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
 
       {/* comment section */}
       <Card.Section withBorder>
-        <Accordion>
-          <Accordion.Item value="comments">
-            <Accordion.Control className="m-1">Thoughts:</Accordion.Control>
-            <Accordion.Panel>
-              {/* add comment form */}
-              {sess?.user ? (
-                <form onSubmit={commentHandler}>
-                  <Group position="left">
-                    <Input
-                      placeholder="Thoughts..."
-                      className="pl-0"
-                      value={comment}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setComment(e.target.value)
-                      }
-                    />
-                    <ActionIcon
-                      type="submit"
-                      variant="light"
-                      color={"grape"}
-                      size="lg"
-                    >
-                      <IconSquareArrowRight size={30} />
-                    </ActionIcon>
-                  </Group>
-                </form>
-              ) : (
-                <Text size={"sm"}>Log in to leave your thoughts</Text>
-              )}
-              {/* comments */}
-              {post.comments.map((comment) => (
-                <div key={comment.id} className="m-3">
-                  <h4 className="font-semibold">{comment.user.name}</h4>
-                  <p className="text-xs">
-                    {comment.createdAt.toLocaleDateString()}
-                  </p>
-                  <p>{comment.content}</p>
-                </div>
-              ))}
-            </Accordion.Panel>
-          </Accordion.Item>
-        </Accordion>
+        <Spoiler
+          maxHeight={120}
+          showLabel="See more Comments"
+          hideLabel="Hide"
+          m={"sm"}
+        >
+          {/* add comment form */}
+          {sess?.user ? (
+            <form onSubmit={commentHandler}>
+              <Group position="left">
+                <Input
+                  placeholder="Comment..."
+                  className=""
+                  value={comment}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setComment(e.target.value)
+                  }
+                />
+                <ActionIcon
+                  type="submit"
+                  variant="light"
+                  color={"grape"}
+                  size="lg"
+                >
+                  <IconSquareArrowRight size={30} />
+                </ActionIcon>
+              </Group>
+            </form>
+          ) : (
+            <Text size={"sm"} m="xs" color={"cyan"}>
+              Log in to leave your thoughts
+            </Text>
+          )}
+          {/* comments */}
+          {post.comments.map((comment) => (
+            <Paper
+              shadow={"md"}
+              p="xs"
+              radius={"md"}
+              withBorder
+              key={comment.id}
+              className="my-4"
+            >
+              <h4 className="font-semibold">
+                {comment.user.name}{" "}
+                <span className="text-xs">
+                  {commentTime(comment.createdAt)}
+                </span>
+              </h4>
+
+              <p>{comment.content}</p>
+            </Paper>
+          ))}
+        </Spoiler>
       </Card.Section>
     </Card>
   );
