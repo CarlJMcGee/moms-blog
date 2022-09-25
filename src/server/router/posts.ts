@@ -65,7 +65,7 @@ export const PostRouter = createRouter()
     input: z.object({
       title: z.string().trim(),
       content: z.string().trim(),
-      imgLink: z.string().trim(),
+      imgLink: z.string().trim().optional(),
     }),
     async resolve({ ctx, input }) {
       const Post = ctx.prisma.post;
@@ -94,7 +94,7 @@ export const PostRouter = createRouter()
       postId: z.string().trim(),
       title: z.string().trim(),
       content: z.string().trim(),
-      imgLink: z.string().trim(),
+      imgLink: z.string().trim().optional(),
     }),
     async resolve({ ctx, input }) {
       const Post = ctx.prisma.post;

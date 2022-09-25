@@ -1,10 +1,14 @@
 import * as React from "react";
 import { Box, Button, Drawer, Group, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { trpc } from "../../utils/trpc";
 
-export interface IPostFormProps {}
+export interface IPostFormProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export default function PostForm(props: IPostFormProps) {
+export default function PostForm({ setOpen }: IPostFormProps) {
+  const utils = trpc.useContext();
   const postForm = useForm({
     initialValues: {
       title: "",
@@ -17,9 +21,16 @@ export default function PostForm(props: IPostFormProps) {
     validateInputOnBlur: true,
   });
 
+  const { mutate: addPost } = trpc.useMutation(["post.new"], {
+    onSuccess() {
+      utils.invalidateQueries(["post.getAll"]);
+      setOpen(false);
+    },
+  });
+
   return (
     <Box>
-      <form>
+      <form onSubmit={postForm.onSubmit((values) => addPost({ ...values }))}>
         <TextInput
           my={"sm"}
           label="Title"
@@ -33,7 +44,12 @@ export default function PostForm(props: IPostFormProps) {
           {...postForm.getInputProps("content")}
         />
         <Group position="center" grow={true}>
-          <Button my={"lg"} className="bg-violet-700" color={"violet"}>
+          <Button
+            type="submit"
+            my={"lg"}
+            className="bg-violet-700"
+            color={"violet"}
+          >
             Share your thought with the world
           </Button>
         </Group>

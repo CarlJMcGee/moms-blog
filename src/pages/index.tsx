@@ -57,7 +57,7 @@ const Home: NextPage = () => {
           padding={"xl"}
           size="xl"
         >
-          <PostForm />
+          <PostForm setOpen={setPostOpen} />
         </Drawer>
       </main>
     </>
