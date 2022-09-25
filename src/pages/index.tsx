@@ -47,25 +47,6 @@ const Home: NextPage = () => {
           {posts.map((post) => (
             <PostCard key={post.id} post={post} sess={sess} />
           ))}
-          {/* {posts.map((post) => (
-            <li key={post.id} className="mx-2 my-4 p-3 border-4 shrink w-1/3">
-              <h3 className="text-xl font-semibold">{post.title}</h3>
-              <h4 className="">{`Says ${post.userSafe.name}`}</h4>
-              <p>{post.content}</p>
-              {post.image && (
-                <img src={post.image} alt={`post ${post.title} image`} />
-              )}
-              {post.commentsSafe.map((comment) => (
-                <>
-                  <h4 className="font-semibold">{comment.userSafe.name}</h4>
-                  <p className="text-xs">
-                    {comment.createdAt.toLocaleDateString()}
-                  </p>
-                  <p>{comment.content}</p>
-                </>
-              ))}
-            </li>
-          ))} */}
         </ol>
       </main>
     </>
