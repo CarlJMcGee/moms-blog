@@ -1,14 +1,17 @@
-import { Box, Button, Group } from "@mantine/core";
+import { Box, Button, Drawer, Group } from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useState } from "react";
 import Header from "../components/header";
 import PostCard from "../components/post-cards";
+import PostForm from "../components/postForm";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   // state
   const { data: sess } = useSession();
+  const [postOpen, setPostOpen] = useState(false);
 
   // queries
   const { data: posts, isLoading: postsLoading } = trpc.useQuery([
@@ -40,9 +43,22 @@ const Home: NextPage = () => {
           ))}
         </ol>
 
-        <Button className="bg-sky-700 fixed bottom-10 left-3 w-1/4">
+        <Button
+          className="bg-sky-700 fixed bottom-10 left-5 w-1/4"
+          onClick={() => setPostOpen(true)}
+        >
           New Thought
         </Button>
+        <Drawer
+          opened={postOpen}
+          onClose={() => setPostOpen(false)}
+          title="New Thought"
+          position="bottom"
+          padding={"xl"}
+          size="xl"
+        >
+          <PostForm />
+        </Drawer>
       </main>
     </>
   );
