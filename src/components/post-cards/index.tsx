@@ -28,17 +28,26 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
 
   // state
   const [comment, setComment] = React.useState("");
+
   // query
-  let user = undefined;
-  if (sess?.user) {
-    const { data, isLoading: userLoading } = trpc.useQuery(["user.me"]);
-    user = data || ({} as UserFull);
-  }
+  const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
 
   // mutations
   const { mutate: addComment } = trpc.useMutation(["comment.add"], {
     onSuccess() {
       utils.invalidateQueries(["post.getAll"]);
+    },
+  });
+  const { mutate: likePost } = trpc.useMutation(["post.addLike"], {
+    onSuccess() {
+      utils.invalidateQueries(["post.getAll"]);
+      utils.invalidateQueries(["user.me"]);
+    },
+  });
+  const { mutate: unlikePost } = trpc.useMutation(["post.removeLike"], {
+    onSuccess() {
+      utils.invalidateQueries(["post.getAll"]);
+      utils.invalidateQueries(["user.me"]);
     },
   });
 
@@ -52,6 +61,22 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
 
     addComment({ content: comment, postId: post.id });
     setComment("");
+  };
+  const likePostHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    postId: string
+  ) => {
+    e.preventDefault();
+
+    likePost({ postId: postId });
+  };
+  const unlikePostHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    postId: string
+  ) => {
+    e.preventDefault();
+
+    unlikePost({ postId: postId });
   };
 
   // wibbly wobbly timey wimey
@@ -76,9 +101,45 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
               {postTime}
             </Text>
           </div>
-          <ActionIcon color={"yellow"} size={"lg"} mr="lg" variant="filled">
-            <IconStar size={34} color="#e7bc27" />
-          </ActionIcon>
+          <Group>
+            {post._count.userLikes <= 0 ? (
+              ""
+            ) : (
+              <Text color={"violet"} size={"lg"} weight="bold">
+                {post._count.userLikes}
+              </Text>
+            )}{" "}
+            {!sess?.user ? (
+              ""
+            ) : user?.likedPosts.find(
+                (likedPost) => likedPost.postId === post.id
+              ) ? (
+              <ActionIcon
+                color={"yellow"}
+                size={"lg"}
+                mr="lg"
+                variant="transparent"
+                className="bg-yellow-500"
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                  unlikePostHandler(e, post.id)
+                }
+              >
+                <IconStar size={34} color="#fff" />
+              </ActionIcon>
+            ) : (
+              <ActionIcon
+                color={"yellow"}
+                size={"lg"}
+                mr="lg"
+                variant="filled"
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                  likePostHandler(e, post.id)
+                }
+              >
+                <IconStar size={34} color="#e7bc27" />
+              </ActionIcon>
+            )}
+          </Group>
         </Group>
       </Card.Section>
 
@@ -97,7 +158,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
       {/* comment section */}
       <Card.Section withBorder>
         <Spoiler
-          maxHeight={120}
+          maxHeight={150}
           showLabel="See more Comments"
           hideLabel="Hide"
           m={"sm"}

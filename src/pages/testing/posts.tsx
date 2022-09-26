@@ -69,7 +69,7 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
   ) => {
     e.preventDefault();
 
-    addLike({ postId: postId, userId: sess?.user?.id ?? "" });
+    addLike({ postId: postId });
   };
   const unlikePostHandler = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -77,7 +77,7 @@ const PostTesting: NextPage = (props: IPostTestingProps) => {
   ) => {
     e.preventDefault();
 
-    removeLike({ postId: postId, userId: sess?.user?.id ?? "" });
+    removeLike({ postId: postId });
   };
   const addCommentHandler = (
     e: React.FormEvent<HTMLElement>,

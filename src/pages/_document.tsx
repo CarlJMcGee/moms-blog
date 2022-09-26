@@ -9,11 +9,7 @@ export default class _Document extends Document {
   render() {
     return (
       <Html>
-        <Head>
-          <title>Sanity Adjacent</title>
-          <meta name="description" content={`Words of "wisdom" daily`} />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+        <Head />
         <body>
           <Main />
           <NextScript />

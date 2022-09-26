@@ -11,6 +11,7 @@ import { trpc } from "../utils/trpc";
 const Home: NextPage = () => {
   // state
   const { data: sess } = useSession();
+  const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
   const [postOpen, setPostOpen] = useState(false);
 
   // queries
@@ -29,26 +30,26 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Sanity Adjacent</title>
+        <title>Sanity Adjacent - Homepage</title>
         <meta name="description" content={`Words of "wisdom" daily`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="box-border">
         <Header sess={sess} />
-
         <ol className="flex flex-col items-center">
           {posts.map((post) => (
             <PostCard key={post.id} post={post} sess={sess} />
           ))}
         </ol>
-
-        <Button
-          className="bg-sky-700 fixed bottom-10 left-5 w-1/4"
-          onClick={() => setPostOpen(true)}
-        >
-          New Thought
-        </Button>
+        {user && user.canPost && (
+          <Button
+            className="bg-sky-700 fixed bottom-10 left-5 w-1/4"
+            onClick={() => setPostOpen(true)}
+          >
+            New Thought
+          </Button>
+        )}{" "}
         <Drawer
           opened={postOpen}
           onClose={() => setPostOpen(false)}

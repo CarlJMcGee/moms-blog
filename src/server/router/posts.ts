@@ -77,6 +77,18 @@ export const PostRouter = createRouter()
           message: `User is not logged in!`,
         });
       }
+
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session?.user?.id },
+      });
+      if (!user?.canPost) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "User is not authorized to post. If you believe this is a mistake, please contact an admin.",
+        });
+      }
+
       const newPost = await Post.create({
         data: {
           title: title,
@@ -123,55 +135,57 @@ export const PostRouter = createRouter()
   })
   .mutation("addLike", {
     input: z.object({
-      userId: z.string().trim(),
       postId: z.string().trim(),
     }),
     async resolve({ ctx, input }) {
       const Likes = ctx.prisma.usersLikedPosts;
-      const { postId, userId } = input;
+      const { postId } = input;
 
-      const likePost = await Likes.create({
-        data: {
-          postId: postId,
-          userId: userId,
-        },
-      });
-
-      if (!likePost) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "like post operation failed",
+      if (ctx.session?.user) {
+        const likePost = await Likes.create({
+          data: {
+            postId: postId,
+            userId: ctx.session?.user?.id ?? "",
+          },
         });
-      }
 
-      return `User liked post`;
+        if (!likePost) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "like post operation failed",
+          });
+        }
+
+        return `User liked post`;
+      }
     },
   })
   .mutation("removeLike", {
     input: z.object({
-      userId: z.string().trim(),
       postId: z.string().trim(),
     }),
     async resolve({ ctx, input }) {
       const Likes = ctx.prisma.usersLikedPosts;
-      const { postId, userId } = input;
+      const { postId } = input;
 
-      const likePost = await Likes.delete({
-        where: {
-          userId_postId: {
-            postId: postId,
-            userId: userId,
+      if (ctx.session?.user) {
+        const likePost = await Likes.delete({
+          where: {
+            userId_postId: {
+              postId: postId,
+              userId: ctx.session.user.id ?? "",
+            },
           },
-        },
-      });
-
-      if (!likePost) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "remove post operation failed",
         });
-      }
 
-      return `User unliked post`;
+        if (!likePost) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "remove post operation failed",
+          });
+        }
+
+        return `User unliked post`;
+      }
     },
   });

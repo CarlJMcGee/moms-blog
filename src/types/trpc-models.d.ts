@@ -3,6 +3,9 @@ import { Comment, Post, User } from "@prisma/client";
 export type PostFull = Post & {
   user: UserShort;
   comments: CommentFull[];
+  _count: {
+    userLikes: number;
+  };
 };
 
 export type UserShort = {
