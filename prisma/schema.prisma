@@ -14,8 +14,49 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
+model UsersLikedPosts {
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    postId String
+    post   Post   @relation(fields: [postId], references: [id])
+
+    @@id([userId, postId])
+}
+
+model UserLikesComments {
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    commentId String
+    comment   Comment @relation(fields: [commentId], references: [id])
+
+    @@id([userId, commentId])
+}
+
+model Post {
+    id        String            @id @default(cuid())
+    title     String
+    content   String
+    image     String?
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @default(now()) @updatedAt
+    userId    String
+    user      User              @relation(fields: [userId], references: [id], onDelete: Cascade, name: "OP")
+    userLikes UsersLikedPosts[]
+    comments  Comment[]
+}
+
+model Comment {
+    id        String              @id @default(cuid())
+    content   String
+    createdAt DateTime            @default(now())
+    updatedAt DateTime            @default(now()) @updatedAt
+    userId    String
+    user      User                @relation(name: "commenter", fields: [userId], references: [id], onDelete: Cascade)
+    postId    String
+    post      Post                @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userLikes UserLikesComments[]
 }
 
 // Necessary for Next auth
@@ -46,11 +87,19 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
+    id            String              @id @default(cuid())
+    name          String
+    email         String?             @unique
     emailVerified DateTime?
+    password      String
     image         String?
+    canPost       Boolean             @default(false)
+    admin         Boolean             @default(false)
+    banned        Boolean             @default(false)
+    posts         Post[]              @relation(name: "OP")
+    comments      Comment[]           @relation(name: "commenter")
+    likedPosts    UsersLikedPosts[]
+    likedComments UserLikesComments[]
     accounts      Account[]
     sessions      Session[]
 }
