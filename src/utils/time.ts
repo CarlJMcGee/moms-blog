@@ -1,12 +1,12 @@
 export const toSeconds = function (
-  minutes: number = 0,
-  hours: number = 0,
-  days: number = 0,
-  weeks: number = 0
+  minutes = 0,
+  hours = 0,
+  days = 0,
+  weeks = 0
 ): number {
-  let week = weeks * 7 * 24 * 60 * 60;
-  let day = days * 24 * 60 * 60;
-  let hour = hours * 60 * 60;
-  let minute = minutes * 60;
+  const week = weeks * 7 * 24 * 60 * 60;
+  const day = days * 24 * 60 * 60;
+  const hour = hours * 60 * 60;
+  const minute = minutes * 60;
   return week + day + hour + minute;
 };

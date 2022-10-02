@@ -55,7 +55,7 @@ export const CommentRouter = createRouter()
     async resolve({ ctx, input }) {
       const Comment = ctx.prisma.comment;
 
-      const update = await Comment.update({
+      return await Comment.update({
         where: {
           id: input.postId,
         },

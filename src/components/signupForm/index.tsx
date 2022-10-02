@@ -4,9 +4,7 @@ import { Box, Button, Group, TextInput } from "@mantine/core";
 import { trpc } from "../../utils/trpc";
 import { signIn } from "next-auth/react";
 
-export interface ISignupFormProps {}
-
-export default function SignupForm(props: ISignupFormProps) {
+export default function SignupForm() {
   const nameVal = /^[a-z0-9$@$!%*?&_]{3,15}$/i;
   const emailVal = /[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/gim;
   const passVal =

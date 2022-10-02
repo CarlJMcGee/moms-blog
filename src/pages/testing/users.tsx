@@ -2,12 +2,9 @@ import { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import * as React from "react";
-import { userRouter } from "../../server/router/users";
 import { trpc } from "../../utils/trpc";
 
-export interface IUserTestingProps {}
-
-const UserTesting: NextPage = (props: IUserTestingProps) => {
+const UserTesting: NextPage = () => {
   // state
   const [userSearch, setUserSearch] = React.useState("");
   const [newUserInfo, setNewUserInfo] = React.useState({

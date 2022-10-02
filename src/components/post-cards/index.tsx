@@ -1,15 +1,13 @@
 import * as React from "react";
 import { Session } from "next-auth";
-import { PostFull, UserFull } from "../../types/trpc-models";
+import { PostFull } from "../../types/trpc-models";
 import { trpc } from "../../utils/trpc";
 import {
   Card,
   Image,
   Text,
   Title,
-  Button,
   Group,
-  Accordion,
   Input,
   ActionIcon,
   Spoiler,

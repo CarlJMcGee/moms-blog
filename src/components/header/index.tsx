@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Drawer,
-  Group,
-  HoverCard,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Box, Button, Drawer, Group, HoverCard, Title } from "@mantine/core";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import SignupForm from "../signupForm";

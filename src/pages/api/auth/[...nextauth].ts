@@ -1,5 +1,4 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
 import Credentials from "next-auth/providers/credentials";
 
 // Prisma adapter for NextAuth, optional and can be removed

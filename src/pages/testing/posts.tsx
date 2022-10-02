@@ -1,14 +1,10 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { comment } from "postcss";
 import * as React from "react";
-import { util } from "zod/lib/helpers/util";
 import { trpc } from "../../utils/trpc";
 
-export interface IPostTestingProps {}
-
-const PostTesting: NextPage = (props: IPostTestingProps) => {
+const PostTesting: NextPage = () => {
   const utils = trpc.useContext();
 
   //state

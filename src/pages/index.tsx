@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Drawer,
-  Group,
-  Paper,
-  Skeleton,
-  Stack,
-} from "@mantine/core";
+import { Button, Drawer, Group, Paper, Skeleton, Stack } from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
