@@ -101,12 +101,12 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
               {postTime}
             </Text>
           </div>
-          <Group>
+          <Group mx={15}>
             {post._count.userLikes <= 0 ? (
               ""
             ) : (
               <Text color={"violet"} size={"lg"} weight="bold">
-                {post._count.userLikes}
+                {`${post._count.userLikes} Likes`}
               </Text>
             )}{" "}
             {!sess?.user ? (

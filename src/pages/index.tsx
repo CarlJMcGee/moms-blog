@@ -1,4 +1,12 @@
-import { Box, Button, Drawer, Group } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Drawer,
+  Group,
+  Paper,
+  Skeleton,
+  Stack,
+} from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
@@ -20,7 +28,26 @@ const Home: NextPage = () => {
   ]);
 
   if (postsLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <>
+        <Header sess={sess} />
+        <Group position="center" mt={100}>
+          <Paper shadow={"md"} radius={"sm"} p={"md"} withBorder>
+            <Stack>
+              <Skeleton height={10} width={300} mt={6} />
+              <Skeleton height={10} width={150} mt={6} />
+              <Skeleton height={10} width={450} mt={6} />
+              <Skeleton height={10} width={450} mt={6} />
+              <Skeleton height={300} width={450} my={20} />
+              <Skeleton height={10} width={300} mt={6} />
+              <Skeleton height={10} width={300} mt={6} />
+              <Skeleton height={10} width={300} mt={6} />
+              <Skeleton height={10} width={300} mt={6} />
+            </Stack>
+          </Paper>
+        </Group>
+      </>
+    );
   }
 
   if (!posts) {
