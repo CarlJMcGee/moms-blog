@@ -38,34 +38,28 @@ export default function SignupForm() {
           : `Must be 6-24 characters and contain one uppercase, lowercase, special character, and number`,
       passConfirm: (input, { password }) =>
         password === input ? null : `Passwords do not match`,
-      imageSrc: (input) =>
-        !selectedFile ? `Please upload a profile picture` : null,
     },
   });
 
   //mutations
-  const { mutate: addUser } = trpc.useMutation(["user.addUser"], {
-    onSuccess() {
-      signIn("credentials", {
-        email: signupForm.values.email,
-        password: signupForm.values.password,
-      });
-    },
-  });
+  const { mutate: addUser, error: addUserError } = trpc.useMutation(
+    ["user.addUser"],
+    {
+      onSuccess() {
+        signIn("credentials", {
+          email: signupForm.values.email,
+          password: signupForm.values.password,
+        });
+      },
+    }
+  );
 
   // hanlder
-  const createUserHandler = ({
-    username,
-    email,
-    password,
-    imageSrc,
-  }: typeof signupForm.values) => {
-    if (selectedFile) {
-      const body = new FormData();
-      body.append("image", selectedFile);
-
-      try {
-      } catch (err) {}
+  const createUserHandler = (values: typeof signupForm.values) => {
+    try {
+      addUser({ ...values });
+    } catch (err) {
+      if (addUserError) console.error(addUserError);
     }
   };
   const uploadPicHandler = async (e: React.MouseEvent<HTMLElement>) => {

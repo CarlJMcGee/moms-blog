@@ -92,7 +92,7 @@ model User {
     email         String?             @unique
     emailVerified DateTime?
     password      String
-    image         String?
+    image         String              @default("https://i.ibb.co/3pr92NZ/generic-face.png")
     canPost       Boolean             @default(false)
     admin         Boolean             @default(false)
     banned        Boolean             @default(false)

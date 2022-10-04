@@ -73,9 +73,10 @@ export const userRouter = createRouter()
       username: z.string().trim(),
       email: z.string().trim(),
       password: z.string().trim(),
+      imageSrc: z.string().trim().optional(),
     }),
     async resolve({ ctx, input }) {
-      const { email, username, password } = input;
+      const { email, username, password, imageSrc } = input;
       const User = ctx.prisma.user;
 
       const cookedPass = await bcrypt.hash(password, 10);
@@ -85,6 +86,7 @@ export const userRouter = createRouter()
           name: username,
           email: email,
           password: cookedPass,
+          image: imageSrc === "" ? undefined : imageSrc,
         },
       });
 
