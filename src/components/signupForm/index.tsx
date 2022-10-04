@@ -94,6 +94,7 @@ export default function SignupForm() {
   if (selectedFile) {
     console.log(selectedFile);
   }
+  console.log(signupForm.values);
 
   return (
     <Box>
