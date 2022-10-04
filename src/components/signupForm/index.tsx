@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Box, Button, FileButton, Group, TextInput, Text } from "@mantine/core";
 import { trpc } from "../../utils/trpc";
@@ -8,6 +8,7 @@ import { ImgbbRes } from "../../types/imageUpload";
 export default function SignupForm() {
   // state
   const [selectedFile, setFile] = useState<File | null>(null);
+  const [uploadingPic, setUploading] = useState(false);
 
   // regEx
   const nameVal = /^[a-z0-9$@$!%*?&_]{3,15}$/i;
@@ -149,8 +150,12 @@ export default function SignupForm() {
           </div>
           {selectedFile && (
             <Button
-              color={"violet"}
-              className="bg-purple-500"
+              color={signupForm.values.imageSrc === "" ? "violet" : "lime"}
+              className={
+                signupForm.values.imageSrc === ""
+                  ? "bg-purple-500"
+                  : "bg-pallete-green-light"
+              }
               mt={"md"}
               onClick={uploadPicHandler}
             >
