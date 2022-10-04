@@ -12,9 +12,12 @@ import {
   ActionIcon,
   Spoiler,
   Paper,
+  Avatar,
+  UnstyledButton,
 } from "@mantine/core";
 import { IconSquareArrowRight, IconStar } from "@tabler/icons";
 import moment from "moment";
+import Link from "next/link";
 
 export interface IPostCardProps {
   post: PostFull | undefined;
@@ -90,11 +93,21 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
         </Title>
         <Group position="apart">
           <div>
-            <Text
-              size={"lg"}
-              weight=""
-              className="px-5"
-            >{`Says ${post.user.name}`}</Text>
+            <Group position="left" spacing={"xs"}>
+              <Text size={"lg"} weight="" className="pl-5">
+                {`Says `}
+              </Text>
+              <Link href={"/"} passHref>
+                <UnstyledButton>
+                  <Group position="left" spacing={"xs"}>
+                    <Text span size={30}>
+                      {post.user.name}
+                    </Text>
+                    <Avatar src={sess?.user?.image} radius={"lg"} size={"md"} />
+                  </Group>
+                </UnstyledButton>
+              </Link>
+            </Group>
             <Text size={"sm"} className="px-5">
               {postTime}
             </Text>
@@ -199,7 +212,10 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
               className="my-4"
             >
               <h4 className="font-semibold">
-                {comment.user.name}{" "}
+                <Group position="left" spacing={"xs"}>
+                  {comment.user.name}{" "}
+                  <Avatar src={sess?.user?.image} size={"sm"} radius={"lg"} />
+                </Group>
                 <span className="text-xs">
                   {commentTime(comment.createdAt)}
                 </span>

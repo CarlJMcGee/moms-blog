@@ -1,5 +1,15 @@
 import * as React from "react";
-import { Box, Button, Drawer, Group, HoverCard, Title } from "@mantine/core";
+import {
+  Avatar,
+  Box,
+  Button,
+  Drawer,
+  Group,
+  HoverCard,
+  Text,
+  Title,
+  UnstyledButton,
+} from "@mantine/core";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import SignupForm from "../signupForm";
@@ -11,6 +21,7 @@ export interface IHeaderProps {
 export default function Header({ sess }: IHeaderProps) {
   const [drawerOpened, setDrawer] = React.useState(false);
 
+  // not logged in
   if (!sess?.user) {
     return (
       <>
@@ -52,6 +63,7 @@ export default function Header({ sess }: IHeaderProps) {
     );
   }
 
+  // logged in
   return (
     <Box>
       <Group position="apart" className="m-5">
@@ -59,13 +71,14 @@ export default function Header({ sess }: IHeaderProps) {
         <Group position="center" className="mx-10">
           <HoverCard width={150} position="bottom">
             <HoverCard.Target>
-              <Button
-                variant="filled"
-                color={"violet"}
-                className="bg-purple-700"
-              >
-                {sess?.user?.name}
-              </Button>
+              <UnstyledButton>
+                <Group position="apart">
+                  <Avatar src={sess.user.image} radius={"lg"} size={"md"} />
+                  <Text className="text-pallete-grey-dark">
+                    {sess?.user?.name}
+                  </Text>
+                </Group>
+              </UnstyledButton>
             </HoverCard.Target>
             <HoverCard.Dropdown>
               <Group position="center">
