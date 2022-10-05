@@ -15,6 +15,7 @@ export const PostRouter = createRouter()
             select: {
               name: true,
               id: true,
+              image: true,
             },
           },
           comments: {
@@ -23,6 +24,7 @@ export const PostRouter = createRouter()
                 select: {
                   name: true,
                   id: true,
+                  image: true,
                 },
               },
             },

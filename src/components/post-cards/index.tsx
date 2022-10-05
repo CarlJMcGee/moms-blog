@@ -103,7 +103,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
                     <Text span size={30}>
                       {post.user.name}
                     </Text>
-                    <Avatar src={sess?.user?.image} radius={"lg"} size={"md"} />
+                    <Avatar src={post.user.image} radius={"lg"} size={"md"} />
                   </Group>
                 </UnstyledButton>
               </Link>
@@ -214,7 +214,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
               <h4 className="font-semibold">
                 <Group position="left" spacing={"xs"}>
                   {comment.user.name}{" "}
-                  <Avatar src={sess?.user?.image} size={"sm"} radius={"lg"} />
+                  <Avatar src={comment.user.image} size={"sm"} radius={"lg"} />
                 </Group>
                 <span className="text-xs">
                   {commentTime(comment.createdAt)}

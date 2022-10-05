@@ -11,6 +11,7 @@ export type PostFull = Post & {
 export type UserShort = {
   name: string;
   id: string;
+  image: string;
 };
 
 export interface UserFull extends Omit<User, "password"> {
