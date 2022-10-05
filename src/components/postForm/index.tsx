@@ -9,14 +9,22 @@ export interface IPostFormProps {
 
 export default function PostForm({ setOpen }: IPostFormProps) {
   const utils = trpc.useContext();
+  const titleVal = /^[a-z0-9$@$!%*?&_]{1,50}$/i;
+  const contentVal = /^[a-z0-9$@$!%*?&_]{1,254}$/i;
   const postForm = useForm({
     initialValues: {
       title: "",
       content: "",
     },
     validate: {
-      title: (input) => (input === "" ? "Must have a title" : null),
-      content: (input) => (input === "" ? "Must have a Body" : null),
+      title: (input) =>
+        !titleVal.test(input)
+          ? "Must have a title no longer than 50 characters"
+          : null,
+      content: (input) =>
+        !contentVal.test(input)
+          ? "Must have a Body no longer than 254 characters"
+          : null,
     },
     validateInputOnBlur: true,
   });
