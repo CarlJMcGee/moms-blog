@@ -27,20 +27,26 @@ export default function Header({ sess }: IHeaderProps) {
       <>
         <Box>
           <Group position="apart" className="m-5">
-            <Title>Sanity Adjacent</Title>
+            <Title
+              order={1}
+              size={50}
+              className="text-palette-grey-dark text-shadow-lg shadow-palette-green-dark"
+            >
+              Sanity Adjacent
+            </Title>
             <Group position="center" className="mx-10">
               <Button
                 variant="filled"
-                color={"violet"}
-                className="bg-purple-700"
+                color={"cyan"}
+                className="bg-palette-blue-dark"
                 onClick={() => signIn()}
               >
                 Log in
               </Button>
               <Button
                 variant="filled"
-                color={"violet"}
-                className="bg-purple-700"
+                color={"cyan"}
+                className="bg-palette-blue-dark"
                 onClick={() => setDrawer(true)}
               >
                 Sign Up
@@ -67,14 +73,20 @@ export default function Header({ sess }: IHeaderProps) {
   return (
     <Box>
       <Group position="apart" className="m-5">
-        <Title>Sanity Adjacent</Title>
+        <Title
+          order={1}
+          size={50}
+          className="text-palette-grey-dark text-shadow-lg shadow-palette-green-dark"
+        >
+          Sanity Adjacent
+        </Title>
         <Group position="center" className="mx-10">
           <HoverCard width={150} position="bottom">
             <HoverCard.Target>
               <UnstyledButton>
                 <Group position="apart">
                   <Avatar src={sess.user.image} radius={"lg"} size={"md"} />
-                  <Text className="text-pallete-grey-dark">
+                  <Text className="text-palette-grey-dark">
                     {sess?.user?.name}
                   </Text>
                 </Group>
@@ -85,7 +97,7 @@ export default function Header({ sess }: IHeaderProps) {
                 <Button
                   variant="filled"
                   color={"violet"}
-                  className="bg-purple-700"
+                  className="bg-palette-brown-light"
                   onClick={() => signOut()}
                 >
                   Logout

@@ -10,7 +10,7 @@ export default class _Document extends Document {
     return (
       <Html>
         <Head />
-        <body className="bg-pallete-green-light">
+        <body className="bg-palette-green-light">
           <Main />
           <NextScript />
         </body>

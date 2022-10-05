@@ -154,7 +154,7 @@ export default function SignupForm() {
               className={
                 signupForm.values.imageSrc === ""
                   ? "bg-purple-500"
-                  : "bg-pallete-green-light"
+                  : "bg-palette-green-light"
               }
               mt={"md"}
               onClick={uploadPicHandler}

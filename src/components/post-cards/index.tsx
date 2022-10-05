@@ -85,7 +85,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
   const commentTime = (date: Date | undefined) => moment(date).fromNow();
 
   return (
-    <Card shadow={"xl"} p="lg" withBorder className="w-96 m-5">
+    <Card shadow={"xl"} p="lg" className="w-96 m-5">
       {/* title and user */}
       <Card.Section>
         <Title order={2} className="px-3 pt-3">
@@ -116,7 +116,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
             {post._count.userLikes <= 0 ? (
               ""
             ) : (
-              <Text color={"violet"} size={"lg"} weight="bold">
+              <Text color={"cyan"} size={"lg"} weight="bold">
                 {`${post._count.userLikes} Likes`}
               </Text>
             )}{" "}
@@ -130,7 +130,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
                 size={"lg"}
                 mr="lg"
                 variant="transparent"
-                className="bg-yellow-500"
+                className="bg-palette-blue-light"
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
                   unlikePostHandler(e, post.id)
                 }
@@ -139,7 +139,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
               </ActionIcon>
             ) : (
               <ActionIcon
-                color={"yellow"}
+                color={"cyan"}
                 size={"lg"}
                 mr="lg"
                 variant="filled"
@@ -147,7 +147,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
                   likePostHandler(e, post.id)
                 }
               >
-                <IconStar size={34} color="#e7bc27" />
+                <IconStar size={34} color="#7BDFF2" />
               </ActionIcon>
             )}
           </Group>
