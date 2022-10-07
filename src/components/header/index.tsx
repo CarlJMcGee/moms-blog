@@ -6,6 +6,7 @@ import {
   Drawer,
   Group,
   HoverCard,
+  Menu,
   Text,
   Title,
   UnstyledButton,
@@ -13,6 +14,7 @@ import {
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import SignupForm from "../signupForm";
+import { IconChevronDown } from "@tabler/icons";
 
 export interface IHeaderProps {
   sess: Session | null;
@@ -81,30 +83,43 @@ export default function Header({ sess }: IHeaderProps) {
           Sanity Adjacent
         </Title>
         <Group position="center" className="mx-10">
-          <HoverCard width={150} position="bottom">
-            <HoverCard.Target>
+          <Menu
+            shadow={"lg"}
+            width={200}
+            position="bottom"
+            closeOnClickOutside
+            trigger={window.innerWidth >= 1024 ? "hover" : "click"}
+          >
+            <Menu.Target>
               <UnstyledButton>
                 <Group position="apart">
                   <Avatar src={sess.user.image} radius={"lg"} size={"md"} />
-                  <Text className="text-palette-grey-dark">
+                  <Text size={25} className="text-palette-grey-dark font-bold">
                     {sess?.user?.name}
                   </Text>
+                  <IconChevronDown />
                 </Group>
               </UnstyledButton>
-            </HoverCard.Target>
-            <HoverCard.Dropdown>
-              <Group position="center">
-                <Button
-                  variant="filled"
-                  color={"violet"}
-                  className="bg-palette-brown-light"
-                  onClick={() => signOut()}
-                >
-                  Logout
-                </Button>
-              </Group>
-            </HoverCard.Dropdown>
-          </HoverCard>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item color={"green"} className="text-center">
+                Change Username
+              </Menu.Item>
+              <Menu.Item color={"green"} className="text-center">
+                Change
+                <br />
+                Profile Picture
+              </Menu.Item>
+              <Menu.Item
+                color={"cyan"}
+                className="text-center"
+                onClick={() => signOut()}
+              >
+                Logout
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </Group>
       </Group>
     </Box>
