@@ -67,11 +67,11 @@ export const PostRouter = createRouter()
     input: z.object({
       title: z.string().trim(),
       content: z.string().trim(),
-      imgLink: z.string().trim().optional(),
+      imageSrc: z.string().trim().optional(),
     }),
     async resolve({ ctx, input }) {
       const Post = ctx.prisma.post;
-      const { title, content, imgLink } = input;
+      const { title, content, imageSrc: imgLink } = input;
 
       if (!ctx.session?.user) {
         throw new TRPCError({

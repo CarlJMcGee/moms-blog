@@ -8,7 +8,6 @@ import { ImgbbRes } from "../../types/imageUpload";
 export default function SignupForm() {
   // state
   const [selectedFile, setFile] = useState<File | null>(null);
-  const [uploadingPic, setUploading] = useState(false);
 
   // regEx
   const nameVal = /^[a-z0-9$@$!%*?&_]{3,15}$/i;
@@ -84,7 +83,7 @@ export default function SignupForm() {
       const res: ImgbbRes = await req.json();
 
       const {
-        data: { image, thumb },
+        data: { image },
       } = res;
       signupForm.setFieldValue("imageSrc", image.url);
     } catch (err) {

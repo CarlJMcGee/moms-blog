@@ -5,7 +5,6 @@ import {
   Button,
   Drawer,
   Group,
-  HoverCard,
   Menu,
   Text,
   Title,
