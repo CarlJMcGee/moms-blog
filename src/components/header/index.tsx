@@ -24,9 +24,13 @@ export interface IHeaderProps {
 export default function Header({ sess }: IHeaderProps) {
   const [drawerOpened, setDrawer] = React.useState(false);
   const [updateOpen, setUpdateOpen] = React.useState(false);
+  const [updateField, setUpdateField] = React.useState<"name" | "pfp">("name");
 
   const { mutate: updateName } = trpc.useMutation(["user.updateName"]);
   const { mutate: updatePfp } = trpc.useMutation(["user.updatePfp"]);
+
+  // handler
+  // TODO: add "updateModalHandler" with "event: React.MouseEvent<HTMLElement>" and "updateField" as params
 
   // not logged in
   if (!sess?.user) {
@@ -108,9 +112,11 @@ export default function Header({ sess }: IHeaderProps) {
             </Menu.Target>
 
             <Menu.Dropdown>
+              // TODO: add onClick for updateModalHandler with "name"
               <Menu.Item color={"green"} className="text-center">
                 Change Username
               </Menu.Item>
+              // TODO: add onClick for updateModalHandler
               <Menu.Item color={"green"} className="text-center">
                 Change
                 <br />
@@ -128,7 +134,7 @@ export default function Header({ sess }: IHeaderProps) {
         </Group>
       </Group>
       <UpdateInfoForm
-        updateField=""
+        updateField={updateField}
         openned={updateOpen}
         setOpenned={setUpdateOpen}
       />

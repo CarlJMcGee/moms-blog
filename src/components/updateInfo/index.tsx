@@ -11,7 +11,7 @@ import * as React from "react";
 import { ImgbbRes } from "../../types/imageUpload";
 
 export interface IUpdateInfoFormProps {
-  updateField: string;
+  updateField: "name" | "pfp";
   openned: boolean;
   setOpenned: React.Dispatch<React.SetStateAction<boolean>>;
 }
