@@ -36,7 +36,7 @@ model UserLikesComments {
 
 model Post {
     id        String            @id @default(cuid())
-    title     String            @db.VarChar(50)
+    title     String            @db.MediumText
     content   String            @db.VarChar(254)
     image     String?
     createdAt DateTime          @default(now())
