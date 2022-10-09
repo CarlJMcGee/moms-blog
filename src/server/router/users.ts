@@ -2,6 +2,7 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
+import { IconZzz } from "@tabler/icons";
 
 export const userRouter = createRouter()
   .query("getAll", {
@@ -111,5 +112,59 @@ export const userRouter = createRouter()
         code: "NOT_FOUND",
         message: `User not found`,
       });
+    },
+  })
+  .mutation("updateName", {
+    input: z.object({
+      name: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { name } = input;
+      const User = ctx.prisma.user;
+
+      const user = await User.update({
+        where: {
+          id: ctx.session?.user?.id,
+        },
+        data: {
+          name: name,
+        },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `User not found`,
+        });
+      }
+
+      return user;
+    },
+  })
+  .mutation("updatePfp", {
+    input: z.object({
+      imageSrc: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { imageSrc } = input;
+      const User = ctx.prisma.user;
+
+      const user = await User.update({
+        where: {
+          id: ctx.session?.user?.id,
+        },
+        data: {
+          image: imageSrc,
+        },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `User not found`,
+        });
+      }
+
+      return user;
     },
   });

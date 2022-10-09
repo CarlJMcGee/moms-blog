@@ -14,6 +14,8 @@ import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import SignupForm from "../signupForm";
 import { IconChevronDown } from "@tabler/icons";
+import { trpc } from "../../utils/trpc";
+import UpdateInfoForm from "../updateInfo";
 
 export interface IHeaderProps {
   sess: Session | null;
@@ -21,6 +23,10 @@ export interface IHeaderProps {
 
 export default function Header({ sess }: IHeaderProps) {
   const [drawerOpened, setDrawer] = React.useState(false);
+  const [updateOpen, setUpdateOpen] = React.useState(false);
+
+  const { mutate: updateName } = trpc.useMutation(["user.updateName"]);
+  const { mutate: updatePfp } = trpc.useMutation(["user.updatePfp"]);
 
   // not logged in
   if (!sess?.user) {
@@ -121,6 +127,11 @@ export default function Header({ sess }: IHeaderProps) {
           </Menu>
         </Group>
       </Group>
+      <UpdateInfoForm
+        updateField=""
+        openned={updateOpen}
+        setOpenned={setUpdateOpen}
+      />
     </Box>
   );
 }
