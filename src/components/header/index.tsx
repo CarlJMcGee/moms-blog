@@ -87,6 +87,8 @@ export default function Header({ sess }: IHeaderProps) {
     );
   }
 
+  console.log(sess.user);
+
   // logged in
   return (
     <Box>

@@ -14,12 +14,18 @@ export const authOptions: NextAuthOptions = {
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
+        session.user.admin = token.admin;
+        session.user.canPost = token.canPost;
+        session.user.banned = token.banned;
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.admin = user.admin;
+        token.canPost = user.canPost;
+        token.banned = user.banned;
       }
       return token;
     },
@@ -61,9 +67,6 @@ export const authOptions: NextAuthOptions = {
         if (!isPassword) {
           return null;
         }
-
-        console.log(user);
-        console.log(isPassword);
 
         return user;
       },
