@@ -49,6 +49,7 @@ export default function PostForm({ setOpen }: IPostFormProps) {
   const { mutate: addPost } = trpc.useMutation(["post.new"], {
     onSuccess() {
       utils.invalidateQueries(["post.getAll"]);
+      setFile(null);
       setOpen(false);
     },
   });

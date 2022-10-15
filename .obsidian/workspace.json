@@ -1,0 +1,147 @@
+{
+  "main": {
+    "id": "eb0748b0f107847f",
+    "type": "split",
+    "children": [
+      {
+        "id": "39bc63058eae7d90",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ff95f92faa781629",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "854da529efa7f2e7",
+    "type": "split",
+    "children": [
+      {
+        "id": "4019e2c87154165f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e531604da47170b2",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "933b20aa58cee333",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "ddca8dffa095991b",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "206a97d9eb953c80",
+    "type": "split",
+    "children": [
+      {
+        "id": "2f93f93db4d59e8d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "97d33753f82f3d4c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "738bc37a0fb2af95",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "README.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "6bf286873683af1c",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "db88a041f51ae5d9",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "README.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "ribbon": {
+    "mostRecentAction": ""
+  },
+  "active": "ff95f92faa781629",
+  "lastOpenFiles": [
+    "coverage/lcov-report/favicon.png",
+    "coverage/lcov-report/sort-arrow-sprite.png"
+  ]
+}

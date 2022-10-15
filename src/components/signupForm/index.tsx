@@ -58,6 +58,7 @@ export default function SignupForm() {
           email: signupForm.values.email,
           password: signupForm.values.password,
         });
+        setFile(null);
       },
     }
   );
@@ -98,10 +99,6 @@ export default function SignupForm() {
       if (err) console.error(err);
     }
   };
-
-  if (selectedFile) {
-    console.log(selectedFile);
-  }
 
   return (
     <Box>

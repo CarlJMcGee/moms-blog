@@ -109,10 +109,9 @@ export default function UpdateInfoForm({
 
     updatePfp({ imageSrc: updateForm.values.imageSrc });
     updateForm.reset;
+    setFile(null);
     setOpenned(false);
   };
-
-  console.log(updateForm.values);
 
   return (
     <>
