@@ -136,7 +136,11 @@ export default function SignupForm() {
         </Group>
         {selectedFile && (
           <>
-            <Image src={URL.createObjectURL(selectedFile)} width={150} />
+            <Image
+              src={URL.createObjectURL(selectedFile)}
+              width={150}
+              alt={selectedFile.name}
+            />
             <Text size={"xs"} mt={"sm"}>
               {selectedFile.name}
             </Text>
