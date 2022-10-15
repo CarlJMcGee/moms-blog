@@ -75,7 +75,7 @@ const Home: NextPage = () => {
           title="New Thought"
           position="bottom"
           padding={"xl"}
-          size="xl"
+          size={"75%"}
         >
           <PostForm setOpen={setPostOpen} />
         </Drawer>

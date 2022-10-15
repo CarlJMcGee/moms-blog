@@ -78,7 +78,7 @@ export default function Header({ sess }: IHeaderProps) {
           onClose={() => setDrawer(false)}
           title="Register"
           padding={"xl"}
-          size="xl"
+          size={"75%"}
           position="top"
         >
           <SignupForm />

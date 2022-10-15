@@ -4,6 +4,7 @@ import {
   Button,
   FileButton,
   Group,
+  Image,
   Text,
   Textarea,
   TextInput,
@@ -98,9 +99,12 @@ export default function PostForm({ setOpen }: IPostFormProps) {
           {...postForm.getInputProps("content")}
         />
         {selectedFile && (
-          <Text size={"xs"} mt={"sm"}>
-            {selectedFile.name}
-          </Text>
+          <>
+            <Image src={URL.createObjectURL(selectedFile)} width={150} />
+            <Text size={"xs"} mt={"sm"}>
+              {selectedFile.name}
+            </Text>
+          </>
         )}
         <Group position="left">
           <div>

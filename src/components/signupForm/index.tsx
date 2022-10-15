@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
-import { Box, Button, FileButton, Group, TextInput, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  FileButton,
+  Group,
+  TextInput,
+  Text,
+  Image,
+} from "@mantine/core";
 import { trpc } from "../../utils/trpc";
 import { signIn } from "next-auth/react";
 import { ImgbbRes } from "../../types/imageUpload";
@@ -94,7 +102,6 @@ export default function SignupForm() {
   if (selectedFile) {
     console.log(selectedFile);
   }
-  console.log(signupForm.values);
 
   return (
     <Box>
@@ -128,9 +135,12 @@ export default function SignupForm() {
           />
         </Group>
         {selectedFile && (
-          <Text size={"xs"} mt={"sm"}>
-            {selectedFile.name}
-          </Text>
+          <>
+            <Image src={URL.createObjectURL(selectedFile)} width={150} />
+            <Text size={"xs"} mt={"sm"}>
+              {selectedFile.name}
+            </Text>
+          </>
         )}
         <Group position="left">
           <div>
