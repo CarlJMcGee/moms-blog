@@ -131,7 +131,9 @@ export default function Header({ sess }: IHeaderProps) {
               <Menu.Item
                 color={"green"}
                 className="text-center"
-                onClick={(e) => updateModalHandler(e, "pfp")}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                  updateModalHandler(e, "pfp")
+                }
               >
                 Change
                 <br />
