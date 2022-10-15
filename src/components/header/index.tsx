@@ -22,15 +22,13 @@ export interface IHeaderProps {
 }
 
 export default function Header({ sess }: IHeaderProps) {
+  const { data: me, isLoading: meLoading } = trpc.useQuery(["user.me"]);
+
   const [drawerOpened, setDrawer] = React.useState(false);
   const [updateOpen, setUpdateOpen] = React.useState(false);
   const [updateField, setUpdateField] = React.useState<"name" | "pfp">("name");
 
-  const { mutate: updateName } = trpc.useMutation(["user.updateName"]);
-  const { mutate: updatePfp } = trpc.useMutation(["user.updatePfp"]);
-
   // handler
-  // TODO: add "updateModalHandler" with "event: React.MouseEvent<HTMLElement>" and "updateField" as params
   const updateModalHandler = (
     e: React.MouseEvent<HTMLElement>,
     field: "name" | "pfp"
@@ -111,9 +109,9 @@ export default function Header({ sess }: IHeaderProps) {
             <Menu.Target>
               <UnstyledButton>
                 <Group position="apart">
-                  <Avatar src={sess.user.image} radius={"lg"} size={"md"} />
+                  <Avatar src={me?.image} radius={"lg"} size={"md"} />
                   <Text size={25} className="text-palette-grey-dark font-bold">
-                    {sess?.user?.name}
+                    {me?.name}
                   </Text>
                   <IconChevronDown />
                 </Group>
@@ -121,7 +119,6 @@ export default function Header({ sess }: IHeaderProps) {
             </Menu.Target>
 
             <Menu.Dropdown>
-              {/* // TODO: add onClick for updateModalHandler with "name" */}
               <Menu.Item
                 color={"green"}
                 className="text-center"
@@ -129,7 +126,6 @@ export default function Header({ sess }: IHeaderProps) {
               >
                 Change Username
               </Menu.Item>
-              {/* // TODO: add onClick for updateModalHandler with "pfp" */}
               <Menu.Item
                 color={"green"}
                 className="text-center"

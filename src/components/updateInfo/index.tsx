@@ -11,6 +11,7 @@ import {
 import { useForm } from "@mantine/form";
 import * as React from "react";
 import { ImgbbRes } from "../../types/imageUpload";
+import { trpc } from "../../utils/trpc";
 
 export interface IUpdateInfoFormProps {
   updateField: "name" | "pfp";
@@ -23,9 +24,23 @@ export default function UpdateInfoForm({
   openned,
   setOpenned,
 }: IUpdateInfoFormProps) {
+  const utils = trpc.useContext();
   // state
   const [selectedFile, setFile] = React.useState<File | null>(null);
   const [imageSrc, setImage] = React.useState("");
+
+  const { mutate: updateName } = trpc.useMutation(["user.updateName"], {
+    onSuccess() {
+      utils.invalidateQueries(["user.me"]);
+      utils.invalidateQueries(["post.getAll"]);
+    },
+  });
+  const { mutate: updatePfp } = trpc.useMutation(["user.updatePfp"], {
+    onSuccess() {
+      utils.invalidateQueries(["user.me"]);
+      utils.invalidateQueries(["post.getAll"]);
+    },
+  });
 
   // RegExp
   const nameVal = /^[a-z0-9$@$!%*?&_]{3,15}$/i;
@@ -67,28 +82,59 @@ export default function UpdateInfoForm({
       const {
         data: { image },
       } = res;
-      setImage(image.url);
+      updateForm.setFieldValue("imageSrc", image.url);
     } catch (err) {
       if (err) console.error(err);
     }
   };
 
+  const updateNameHandler = (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (updateForm.values.name === "") {
+      return;
+    }
+
+    updateName({ name: updateForm.values.name });
+    updateForm.reset;
+    setOpenned(false);
+  };
+
+  const updatePfpHandler = (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    if (updateForm.values.imageSrc === "") {
+      return;
+    }
+
+    updatePfp({ imageSrc: updateForm.values.imageSrc });
+    updateForm.reset;
+    setOpenned(false);
+  };
+
+  console.log(updateForm.values);
+
   return (
     <>
       <Modal
         opened={openned}
-        onClose={() => setOpenned(false)}
+        onClose={() => {
+          setOpenned(false);
+          setFile(null);
+          updateForm.reset;
+        }}
         title={`Update ${updateField}`}
       >
         <div>
           {updateField === "name" && (
-            <form>
+            <form onSubmit={updateNameHandler}>
               <TextInput
                 label="Username"
                 withAsterisk
                 {...updateForm.getInputProps("name")}
               />
               <Button
+                type="submit"
                 size="sm"
                 mt={"md"}
                 fullWidth
@@ -100,7 +146,7 @@ export default function UpdateInfoForm({
             </form>
           )}
           {updateField === "pfp" && (
-            <form>
+            <form onSubmit={updatePfpHandler}>
               <Stack align={"center"}>
                 {selectedFile && (
                   <>
@@ -132,9 +178,11 @@ export default function UpdateInfoForm({
                   </div>
                   {selectedFile && (
                     <Button
-                      color={imageSrc === "" ? "violet" : "lime"}
+                      color={
+                        updateForm.values.imageSrc === "" ? "violet" : "lime"
+                      }
                       className={
-                        imageSrc === ""
+                        updateForm.values.imageSrc === ""
                           ? "bg-purple-500"
                           : "bg-palette-green-light"
                       }
@@ -144,9 +192,16 @@ export default function UpdateInfoForm({
                     </Button>
                   )}
                 </Group>
-                <Button fullWidth color={"violet"} className="bg-violet-700">
-                  Update
-                </Button>
+                {updateForm.values.imageSrc !== "" && (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    color={"violet"}
+                    className="bg-violet-700"
+                  >
+                    Update
+                  </Button>
+                )}
               </Stack>
             </form>
           )}
