@@ -5,6 +5,8 @@ import {
   Text,
   TextInput,
   Group,
+  Stack,
+  Image,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import * as React from "react";
@@ -78,54 +80,77 @@ export default function UpdateInfoForm({
         onClose={() => setOpenned(false)}
         title={`Update ${updateField}`}
       >
-        <form>
+        <div>
           {updateField === "name" && (
-            <TextInput
-              label="Username"
-              withAsterisk
-              {...updateForm.getInputProps("name")}
-            />
+            <form>
+              <TextInput
+                label="Username"
+                withAsterisk
+                {...updateForm.getInputProps("name")}
+              />
+              <Button
+                size="sm"
+                mt={"md"}
+                fullWidth
+                color={"violet"}
+                className="bg-violet-700"
+              >
+                Update
+              </Button>
+            </form>
           )}
           {updateField === "pfp" && (
-            <Group>
-              {selectedFile && (
-                <Text size={"xs"} mt={"sm"}>
-                  {selectedFile.name}
-                </Text>
-              )}
-              <Group position="left">
-                <div>
-                  <FileButton onChange={setFile} accept="image/png,image/jpeg">
-                    {(props) => (
-                      <Button
-                        {...props}
-                        color="violet"
-                        className="bg-violet-700"
-                        mt={"md"}
-                      >
-                        Select Picture
-                      </Button>
-                    )}
-                  </FileButton>
-                </div>
+            <form>
+              <Stack align={"center"}>
                 {selectedFile && (
-                  <Button
-                    color={imageSrc === "" ? "violet" : "lime"}
-                    className={
-                      imageSrc === ""
-                        ? "bg-purple-500"
-                        : "bg-palette-green-light"
-                    }
-                    mt={"md"}
-                    onClick={uploadPicHandler}
-                  >
-                    Upload
-                  </Button>
+                  <>
+                    <Image
+                      src={URL.createObjectURL(selectedFile)}
+                      width={150}
+                    />
+                    <Text size={"xs"} mt={"sm"}>
+                      {selectedFile.name}
+                    </Text>
+                  </>
                 )}
-              </Group>
-            </Group>
+                <Group position="left">
+                  <div>
+                    <FileButton
+                      onChange={setFile}
+                      accept="image/png,image/jpeg"
+                    >
+                      {(props) => (
+                        <Button
+                          {...props}
+                          color="violet"
+                          className="bg-violet-700"
+                        >
+                          Select Picture
+                        </Button>
+                      )}
+                    </FileButton>
+                  </div>
+                  {selectedFile && (
+                    <Button
+                      color={imageSrc === "" ? "violet" : "lime"}
+                      className={
+                        imageSrc === ""
+                          ? "bg-purple-500"
+                          : "bg-palette-green-light"
+                      }
+                      onClick={uploadPicHandler}
+                    >
+                      Upload
+                    </Button>
+                  )}
+                </Group>
+                <Button fullWidth color={"violet"} className="bg-violet-700">
+                  Update
+                </Button>
+              </Stack>
+            </form>
           )}
-        </form>
+        </div>
       </Modal>
     </>
   );

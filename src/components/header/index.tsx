@@ -31,6 +31,15 @@ export default function Header({ sess }: IHeaderProps) {
 
   // handler
   // TODO: add "updateModalHandler" with "event: React.MouseEvent<HTMLElement>" and "updateField" as params
+  const updateModalHandler = (
+    e: React.MouseEvent<HTMLElement>,
+    field: "name" | "pfp"
+  ) => {
+    e.preventDefault();
+
+    setUpdateField(field);
+    setUpdateOpen(true);
+  };
 
   // not logged in
   if (!sess?.user) {
@@ -112,12 +121,20 @@ export default function Header({ sess }: IHeaderProps) {
             </Menu.Target>
 
             <Menu.Dropdown>
-              // TODO: add onClick for updateModalHandler with "name"
-              <Menu.Item color={"green"} className="text-center">
+              {/* // TODO: add onClick for updateModalHandler with "name" */}
+              <Menu.Item
+                color={"green"}
+                className="text-center"
+                onClick={(e) => updateModalHandler(e, "name")}
+              >
                 Change Username
               </Menu.Item>
-              // TODO: add onClick for updateModalHandler
-              <Menu.Item color={"green"} className="text-center">
+              {/* // TODO: add onClick for updateModalHandler with "pfp" */}
+              <Menu.Item
+                color={"green"}
+                className="text-center"
+                onClick={(e) => updateModalHandler(e, "pfp")}
+              >
                 Change
                 <br />
                 Profile Picture
