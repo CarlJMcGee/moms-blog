@@ -63,7 +63,7 @@ const Home: NextPage = () => {
         </ol>
         {user && user.canPost && (
           <Button
-            className="bg-sky-700 fixed bottom-10 left-5 w-1/4"
+            className="bg-sky-700 fixed bottom-10 left-5 w-1/4 p-0"
             onClick={() => setPostOpen(true)}
           >
             New Thought
