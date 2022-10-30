@@ -14,6 +14,7 @@ import {
   Paper,
   Avatar,
   UnstyledButton,
+  Stack,
 } from "@mantine/core";
 import { IconSquareArrowRight, IconStar } from "@tabler/icons";
 import moment from "moment";
@@ -81,8 +82,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
   };
 
   // wibbly wobbly timey wimey
-  const postTime = moment(post.comments[0]?.createdAt).fromNow();
-  const commentTime = (date: Date | undefined) => moment(date).fromNow();
+  const timeAgo = (date: Date | undefined) => moment(date).fromNow();
 
   return (
     <Card shadow={"xl"} p="lg" className="w-96 m-5">
@@ -91,7 +91,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
         <Title order={2} className="px-3 pt-3">
           {post.title}
         </Title>
-        <Group position="apart">
+        <Stack justify={"space-around"}>
           <div>
             <Group position="left" spacing={"xs"}>
               <Text size={"lg"} weight="" className="pl-5">
@@ -109,26 +109,18 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
               </Link>
             </Group>
             <Text size={"sm"} className="px-5">
-              {postTime}
+              {timeAgo(post.createdAt)}
             </Text>
           </div>
-          <Group mx={15}>
-            {post._count.userLikes <= 0 ? (
-              ""
-            ) : (
-              <Text color={"cyan"} size={"lg"} weight="bold">
-                {`${post._count.userLikes} Likes`}
-              </Text>
-            )}{" "}
+          <Group mx={15} position={"left"}>
             {!sess?.user ? (
-              ""
+              "" // if not logged in, don't render like button
             ) : user?.likedPosts.find(
-                (likedPost) => likedPost.postId === post.id
+                (likedPost) => likedPost.postId === post.id // if user has post in likedPost[]
               ) ? (
-              <ActionIcon
+              <ActionIcon // render filled button icon
                 color={"yellow"}
                 size={"lg"}
-                mr="lg"
                 variant="transparent"
                 className="bg-palette-blue-light"
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
@@ -138,7 +130,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
                 <IconStar size={34} color="#fff" />
               </ActionIcon>
             ) : (
-              <ActionIcon
+              <ActionIcon // else render standard icon
                 color={"cyan"}
                 size={"lg"}
                 mr="lg"
@@ -149,9 +141,16 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
               >
                 <IconStar size={34} color="#7BDFF2" />
               </ActionIcon>
+            )}{" "}
+            {post._count.userLikes <= 0 ? (
+              "" // if no likes render no like count
+            ) : (
+              <Text color={"cyan"} size={"lg"} weight="bold">
+                {`${post._count.userLikes} Likes`}
+              </Text>
             )}
           </Group>
-        </Group>
+        </Stack>
       </Card.Section>
 
       {/* post content and image */}
@@ -162,7 +161,13 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
       </Group>
       {post.image && (
         <Card.Section>
-          <Image src={post.image} alt={`post ${post.title} image`} />
+          <a href={post.image} target="_blank">
+            <Image
+              src={post.image}
+              alt={`post ${post.title} image`}
+              withPlaceholder
+            />
+          </a>
         </Card.Section>
       )}
 
@@ -216,9 +221,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
                   {comment.user.name}{" "}
                   <Avatar src={comment.user.image} size={"sm"} radius={"lg"} />
                 </Group>
-                <span className="text-xs">
-                  {commentTime(comment.createdAt)}
-                </span>
+                <span className="text-xs">{timeAgo(comment.createdAt)}</span>
               </h4>
 
               <p>{comment.content}</p>

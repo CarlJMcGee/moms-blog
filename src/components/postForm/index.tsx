@@ -24,8 +24,8 @@ export default function PostForm({ setOpen }: IPostFormProps) {
   const [selectedFile, setFile] = React.useState<File | null>(null);
 
   // RegExp
-  const titleVal = /^[a-z0-9$@$!%*?&_. ]{1,50}$/i;
-  const contentVal = /^[a-z0-9$@$!%*?&_. ]{1,254}$/i;
+  const titleVal = /^[a-z0-9$@$!%*?&_., ]{1,50}$/i;
+  const contentVal = /^[a-z0-9$@$!%*?&_., ]{1,254}$/i;
   const postForm = useForm({
     initialValues: {
       title: "",
