@@ -161,7 +161,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
       </Group>
       {post.image && (
         <Card.Section>
-          <a href={post.image} target="_blank">
+          <a href={post.image} target="_blank" rel="noreferrer">
             <Image
               src={post.image}
               alt={`post ${post.title} image`}
