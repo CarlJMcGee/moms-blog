@@ -23,7 +23,8 @@
     "**/*.cjs",
     "**/*.mjs",
     "next.config.mjs",
-    "next.config.mjs"
+    "next.config.mjs",
+    "worker/index.js"
   ],
   "exclude": ["node_modules"]
 }
