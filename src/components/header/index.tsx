@@ -46,7 +46,12 @@ export default function Header({ sess }: IHeaderProps) {
       <>
         <Box>
           <Group position="center" className="m-5">
-            <Image src={logo.src} width={200} mx={"100"} />
+            <Image
+              src={logo.src}
+              width={200}
+              mx={"100"}
+              alt={`sanity adjacent logo`}
+            />
             <Button
               variant="filled"
               color={"cyan"}
