@@ -5,9 +5,9 @@ import {
   Button,
   Drawer,
   Group,
+  Image,
   Menu,
   Text,
-  Title,
   UnstyledButton,
 } from "@mantine/core";
 import { Session } from "next-auth";
@@ -16,6 +16,7 @@ import SignupForm from "../signupForm";
 import { IconChevronDown } from "@tabler/icons";
 import { trpc } from "../../utils/trpc";
 import UpdateInfoForm from "../updateInfo";
+import logo from "./assets/sanity-adjacent-logo-template.webp";
 
 export interface IHeaderProps {
   sess: Session | null;
@@ -44,32 +45,24 @@ export default function Header({ sess }: IHeaderProps) {
     return (
       <>
         <Box>
-          <Group position="apart" className="m-5">
-            <Title
-              order={1}
-              size={50}
-              className="text-palette-grey-dark text-shadow-lg shadow-palette-green-dark"
+          <Group position="center" className="m-5">
+            <Image src={logo.src} width={200} mx={"100"} />
+            <Button
+              variant="filled"
+              color={"cyan"}
+              className="bg-palette-blue-dark"
+              onClick={() => signIn()}
             >
-              Sanity Adjacent
-            </Title>
-            <Group position="center" className="mx-10">
-              <Button
-                variant="filled"
-                color={"cyan"}
-                className="bg-palette-blue-dark"
-                onClick={() => signIn()}
-              >
-                Log in
-              </Button>
-              <Button
-                variant="filled"
-                color={"cyan"}
-                className="bg-palette-blue-dark"
-                onClick={() => setDrawer(true)}
-              >
-                Sign Up
-              </Button>
-            </Group>
+              Log in
+            </Button>
+            <Button
+              variant="filled"
+              color={"cyan"}
+              className="bg-palette-blue-dark"
+              onClick={() => setDrawer(true)}
+            >
+              Sign Up
+            </Button>
           </Group>
         </Box>
 
@@ -87,19 +80,11 @@ export default function Header({ sess }: IHeaderProps) {
     );
   }
 
-  console.log(sess.user);
-
   // logged in
   return (
     <Box>
-      <Group position="apart" className="m-5">
-        <Title
-          order={1}
-          size={50}
-          className="text-palette-grey-dark text-shadow-lg shadow-palette-green-dark"
-        >
-          Sanity Adjacent
-        </Title>
+      <Group position="center" className="m-5">
+        <Image src={logo.src} width={200} mx={"100"} />
         <Group position="center" className="mx-10">
           <Menu
             shadow={"lg"}
