@@ -52,22 +52,24 @@ export default function Header({ sess }: IHeaderProps) {
               mx={"100"}
               alt={`sanity adjacent logo`}
             />
-            <Button
-              variant="filled"
-              color={"cyan"}
-              className="bg-palette-blue-dark"
-              onClick={() => signIn()}
-            >
-              Log in
-            </Button>
-            <Button
-              variant="filled"
-              color={"cyan"}
-              className="bg-palette-blue-dark"
-              onClick={() => setDrawer(true)}
-            >
-              Sign Up
-            </Button>
+            <Group>
+              <Button
+                variant="filled"
+                color={"cyan"}
+                className="bg-palette-blue-dark"
+                onClick={() => signIn()}
+              >
+                Log in
+              </Button>
+              <Button
+                variant="filled"
+                color={"cyan"}
+                className="bg-palette-blue-dark"
+                onClick={() => setDrawer(true)}
+              >
+                Sign Up
+              </Button>
+            </Group>
           </Group>
         </Box>
 
