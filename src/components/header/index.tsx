@@ -89,7 +89,12 @@ export default function Header({ sess }: IHeaderProps) {
   return (
     <Box>
       <Group position="center" className="m-5">
-        <Image src={logo.src} width={200} mx={"100"} />
+        <Image
+          src={logo.src}
+          width={200}
+          mx={"100"}
+          alt={`sanity adjacent logo`}
+        />
         <Group position="center" className="mx-10">
           <Menu
             shadow={"lg"}
@@ -101,7 +106,12 @@ export default function Header({ sess }: IHeaderProps) {
             <Menu.Target>
               <UnstyledButton>
                 <Group position="apart">
-                  <Avatar src={me?.image} radius={"lg"} size={"md"} />
+                  <Avatar
+                    src={me?.image}
+                    radius={"lg"}
+                    size={"md"}
+                    alt={`user profile picture`}
+                  />
                   <Text size={25} className="text-palette-grey-dark font-bold">
                     {me?.name}
                   </Text>
