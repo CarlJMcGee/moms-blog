@@ -1,4 +1,6 @@
-import { env } from "./src/env/server.mjs";
+const withPwa = require("next-pwa")({
+  dest: "public",
+});
 
 /**
  * Don't be scared of the generics here.
@@ -12,7 +14,7 @@ function defineNextConfig(config) {
   return config;
 }
 
-export default defineNextConfig({
+module.exports = withPwa({
   reactStrictMode: true,
   swcMinify: true,
   // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing

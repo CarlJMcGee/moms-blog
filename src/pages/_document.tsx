@@ -9,7 +9,11 @@ export default class _Document extends Document {
   render() {
     return (
       <Html>
-        <Head />
+        <Head>
+          <link rel="manifest" href="manifest.json" />
+          <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+          <link rel="apple-touch-icon" href="ios\152.png" />
+        </Head>
         <body className="bg-palette-green-light">
           <Main />
           <NextScript />
