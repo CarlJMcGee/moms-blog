@@ -11,21 +11,14 @@ export const toSeconds = function (
   return week + day + hour + minute;
 };
 
-export const timeOut = (funct: () => any, delay: number): Promise<any> => {
- return new Promise((resolve, reject) => {
-    setTimeout(funct, delay)
-    resolve()
-  })
-}
-
-const main = async function (){
-  const func = ()=> {
-    console.log(`Times up!`);
-  }
-console.log(`start`)
- await timeOut(() => {
-   console.log(`middle`);
- }, 3000)
-  console.log(`end`);
-}
-main()
+export const asyncTimeOut = (
+  funct: () => any,
+  delay: number
+): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      funct();
+      resolve();
+    }, delay);
+  });
+};
