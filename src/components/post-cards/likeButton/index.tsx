@@ -11,10 +11,6 @@ export interface ILikeButtonProps {
 }
 
 export default function LikeButton({ sess, post }: ILikeButtonProps) {
-  if (!post) {
-    return <h3>Error no post found</h3>;
-  }
-
   const utils = trpc.useContext();
 
   // query
@@ -22,7 +18,7 @@ export default function LikeButton({ sess, post }: ILikeButtonProps) {
   const userLikesSet = new Set(user?.likedPosts.map((like) => like.postId));
 
   //state
-  const [liked, setLike] = useState(userLikesSet.has(post?.id));
+  const [liked, setLike] = useState(userLikesSet.has(post?.id ?? ""));
 
   //mutations
   const { mutate: likePost } = trpc.useMutation(["post.addLike"], {
@@ -60,6 +56,9 @@ export default function LikeButton({ sess, post }: ILikeButtonProps) {
     unlikePost({ postId: postId });
   };
 
+  if (!post) {
+    return <h3>Error no post found</h3>;
+  }
   return (
     <>
       {!sess?.user ? (
