@@ -24,7 +24,7 @@
     "**/*.mjs",
     "next.config.mjs",
     "next.config.mjs",
-    "worker/index.js"
+    "worker/index.js.bak"
   ],
   "exclude": ["node_modules"]
 }

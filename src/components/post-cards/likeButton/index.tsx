@@ -1,7 +1,7 @@
 import { ActionIcon, Text } from "@mantine/core";
 import { IconStar } from "@tabler/icons";
 import { Session } from "next-auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PostFull } from "../../../types/trpc-models";
 import { trpc } from "../../../utils/trpc";
 
