@@ -16,9 +16,10 @@ import {
   UnstyledButton,
   Stack,
 } from "@mantine/core";
-import { IconSquareArrowRight, IconStar } from "@tabler/icons";
+import { IconSquareArrowRight } from "@tabler/icons";
 import moment from "moment";
 import Link from "next/link";
+import LikeButton from "./likeButton";
 
 export interface IPostCardProps {
   post: PostFull | undefined;
@@ -31,25 +32,10 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
   // state
   const [comment, setComment] = React.useState("");
 
-  // query
-  const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
-
   // mutations
   const { mutate: addComment } = trpc.useMutation(["comment.add"], {
     onSuccess() {
       utils.invalidateQueries(["post.getAll"]);
-    },
-  });
-  const { mutate: likePost } = trpc.useMutation(["post.addLike"], {
-    onSuccess() {
-      utils.invalidateQueries(["post.getAll"]);
-      utils.invalidateQueries(["user.me"]);
-    },
-  });
-  const { mutate: unlikePost } = trpc.useMutation(["post.removeLike"], {
-    onSuccess() {
-      utils.invalidateQueries(["post.getAll"]);
-      utils.invalidateQueries(["user.me"]);
     },
   });
 
@@ -63,22 +49,6 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
 
     addComment({ content: comment, postId: post.id });
     setComment("");
-  };
-  const likePostHandler = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    postId: string
-  ) => {
-    e.preventDefault();
-
-    likePost({ postId: postId });
-  };
-  const unlikePostHandler = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    postId: string
-  ) => {
-    e.preventDefault();
-
-    unlikePost({ postId: postId });
   };
 
   // wibbly wobbly timey wimey
@@ -113,42 +83,7 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
             </Text>
           </div>
           <Group mx={15} position={"left"}>
-            {!sess?.user ? (
-              "" // if not logged in, don't render like button
-            ) : user?.likedPosts.find(
-                (likedPost) => likedPost.postId === post.id // if user has post in likedPost[]
-              ) ? (
-              <ActionIcon // render filled button icon
-                color={"yellow"}
-                size={"lg"}
-                variant="transparent"
-                className="bg-palette-blue-light"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                  unlikePostHandler(e, post.id)
-                }
-              >
-                <IconStar size={34} color="#fff" />
-              </ActionIcon>
-            ) : (
-              <ActionIcon // else render standard icon
-                color={"cyan"}
-                size={"lg"}
-                mr="lg"
-                variant="filled"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                  likePostHandler(e, post.id)
-                }
-              >
-                <IconStar size={34} color="#7BDFF2" />
-              </ActionIcon>
-            )}{" "}
-            {post._count.userLikes <= 0 ? (
-              "" // if no likes render no like count
-            ) : (
-              <Text color={"cyan"} size={"lg"} weight="bold">
-                {`${post._count.userLikes} Likes`}
-              </Text>
-            )}
+            <LikeButton post={post} sess={sess} />
           </Group>
         </Stack>
       </Card.Section>
