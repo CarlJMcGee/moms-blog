@@ -24,8 +24,6 @@ export default function PostForm({ setOpen }: IPostFormProps) {
   const [selectedFile, setFile] = React.useState<File | null>(null);
 
   // RegExp
-  const titleVal = /^[a-z0-9$@$!%*?&_., ]{1,50}$/i;
-  const contentVal = /^[a-z0-9$@$!%*?&_., ]{1,254}$/i;
   const postForm = useForm({
     initialValues: {
       title: "",
@@ -34,11 +32,11 @@ export default function PostForm({ setOpen }: IPostFormProps) {
     },
     validate: {
       title: (input) =>
-        !titleVal.test(input)
+        input.length < 1 || input.length > 50
           ? "Must have a title no longer than 50 characters"
           : null,
       content: (input) =>
-        !contentVal.test(input)
+        input.length < 1 || input.length > 254
           ? "Must have a Body no longer than 254 characters"
           : null,
     },
