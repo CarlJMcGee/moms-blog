@@ -5,7 +5,8 @@ type channelEvt =
   | "added_post"
   | "added_comment"
   | "liked_post"
-  | "unliked_post";
+  | "unliked_post"
+  | "updated_info";
 
 type pusherChannels = "main";
 

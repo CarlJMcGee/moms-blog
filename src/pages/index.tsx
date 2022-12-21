@@ -36,6 +36,10 @@ const Home: NextPage = () => {
     BindEvent("unliked_post", () => {
       utils.invalidateQueries("post.getAll");
     });
+    BindEvent("updated_info", () => {
+      utils.invalidateQueries("user.me");
+      utils.invalidateQueries("post.getAll");
+    });
   }, []);
 
   if (postsLoading) {
