@@ -1,7 +1,13 @@
 import PusherClientBase, { Channel } from "pusher-js";
 import PusherServerBase, { Response } from "pusher";
 
-type channelEvt = "added_post" | "added_comment";
+type channelEvt =
+  | "added_post"
+  | "added_comment"
+  | "liked_post"
+  | "unliked_post";
+
+type pusherChannels = "main";
 
 export const pusherServer = () =>
   new PusherServerBase({
@@ -17,15 +23,14 @@ export const pusherClient = new PusherClientBase("8800cf5b24ddc5c1c620", {
   forceTLS: true,
 });
 
-export const channels = {
-  main: "main_channel",
-};
-
 export const useChannel = (
-  channel: string
+  channel: pusherChannels
 ): {
   Subscription: Channel;
-  BindEvent: <T = void>(event: string, callback: (data: T) => any) => Channel;
+  BindEvent: <T = void>(
+    event: channelEvt,
+    callback: (data: T) => any
+  ) => Channel;
 } => {
   const Subscription = pusherClient.subscribe(channel);
   function BindEvent<T = void>(
@@ -38,7 +43,7 @@ export const useChannel = (
 };
 
 export async function triggerEvent<D = void>(
-  channel: string,
+  channel: pusherChannels,
   event: channelEvt,
   data: D
 ): Promise<Response>;
