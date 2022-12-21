@@ -1,6 +1,7 @@
 import { createRouter } from "./context";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { triggerEvent } from "../../utils/pusherStore";
 
 export const CommentRouter = createRouter()
   .query("getAll", {
@@ -44,6 +45,7 @@ export const CommentRouter = createRouter()
         });
       }
 
+      await triggerEvent("main", "added_comment", "added new comment");
       return `User made a comment on post`;
     },
   })

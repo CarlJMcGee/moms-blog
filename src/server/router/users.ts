@@ -2,7 +2,7 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
-import { IconZzz } from "@tabler/icons";
+import { triggerEvent } from "../../utils/pusherStore";
 
 export const userRouter = createRouter()
   .query("getAll", {
@@ -19,6 +19,7 @@ export const userRouter = createRouter()
       return usersSafe;
     },
   })
+
   .mutation("getOne", {
     input: z.object({
       userId: z.string().trim(),
@@ -49,6 +50,7 @@ export const userRouter = createRouter()
       return userSafe;
     },
   })
+
   .query("me", {
     async resolve({ ctx }) {
       if (!ctx.session?.user) {
@@ -69,6 +71,7 @@ export const userRouter = createRouter()
       return meSafe;
     },
   })
+
   .mutation("addUser", {
     input: z.object({
       username: z.string().trim(),
@@ -96,24 +99,7 @@ export const userRouter = createRouter()
       return newUserSafe;
     },
   })
-  .mutation("loginTemp", {
-    input: z.object({
-      email: z.string().trim(),
-      pass: z.string().trim(),
-    }),
-    async resolve({ ctx, input }) {
-      const user = await ctx.prisma.user.findUnique({
-        where: { email: input.email },
-      });
-      if (user) {
-        return bcrypt.compare(input.pass, user.password);
-      }
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: `User not found`,
-      });
-    },
-  })
+
   .mutation("updateName", {
     input: z.object({
       name: z.string(),
@@ -138,9 +124,11 @@ export const userRouter = createRouter()
         });
       }
 
+      triggerEvent("main", "updated_info", `changed name to ${user.name}`);
       return user;
     },
   })
+
   .mutation("updatePfp", {
     input: z.object({
       imageSrc: z.string(),
@@ -165,6 +153,7 @@ export const userRouter = createRouter()
         });
       }
 
+      triggerEvent("main", "updated_info", `changed profile picture`);
       return user;
     },
   });
