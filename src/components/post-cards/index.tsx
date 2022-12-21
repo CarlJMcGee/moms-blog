@@ -27,16 +27,16 @@ export interface IPostCardProps {
 }
 
 const PostCard = ({ post, sess }: IPostCardProps) => {
-  const utils = trpc.useContext();
+  // const utils = trpc.useContext();
 
   // state
   const [comment, setComment] = React.useState("");
 
   // mutations
   const { mutate: addComment } = trpc.useMutation(["comment.add"], {
-    onSuccess() {
-      utils.invalidateQueries(["post.getAll"]);
-    },
+    // onSuccess() {
+    //   utils.invalidateQueries(["post.getAll"]);
+    // },
   });
 
   if (!post) {

@@ -1,6 +1,7 @@
 import { createRouter } from "./context";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { triggerEvent } from "../../utils/pusherStore";
 
 export const PostRouter = createRouter()
   .query("getAll", {
@@ -28,8 +29,7 @@ export const PostRouter = createRouter()
                 },
               },
             },
-            take: 5,
-            orderBy: { createdAt: "desc" },
+            orderBy: { createdAt: "asc" },
           },
           _count: {
             select: {
@@ -100,6 +100,7 @@ export const PostRouter = createRouter()
         },
       });
 
+      await triggerEvent("main", "added_post", "added new post");
       return newPost;
     },
   })
@@ -131,7 +132,6 @@ export const PostRouter = createRouter()
           message: `User is not logged in!`,
         });
       }
-
       return `User updated post`;
     },
   })
@@ -158,6 +158,7 @@ export const PostRouter = createRouter()
           });
         }
 
+        await triggerEvent("main", "liked_post", "liked post");
         return `User liked post`;
       }
     },
@@ -187,6 +188,7 @@ export const PostRouter = createRouter()
           });
         }
 
+        await triggerEvent("main", "unliked_post", "unliked post");
         return `User unliked post`;
       }
     },

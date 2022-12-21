@@ -2,13 +2,15 @@ import { Button, Drawer, Group, Paper, Skeleton, Stack } from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/header";
 import PostCard from "../components/post-cards";
 import PostForm from "../components/postForm";
+import { useChannel } from "../utils/pusherStore";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
+  const utils = trpc.useContext();
   // state
   const { data: sess } = useSession();
   const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
@@ -18,6 +20,27 @@ const Home: NextPage = () => {
   const { data: posts, isLoading: postsLoading } = trpc.useQuery([
     "post.getAll",
   ]);
+
+  // pusher
+  const { BindEvent } = useChannel("main");
+  useEffect(() => {
+    BindEvent("added_post", () => {
+      utils.invalidateQueries("post.getAll");
+    });
+    BindEvent("added_comment", () => {
+      utils.invalidateQueries("post.getAll");
+    });
+    BindEvent("liked_post", () => {
+      utils.invalidateQueries("post.getAll");
+    });
+    BindEvent("unliked_post", () => {
+      utils.invalidateQueries("post.getAll");
+    });
+    BindEvent("updated_info", () => {
+      utils.invalidateQueries("user.me");
+      utils.invalidateQueries("post.getAll");
+    });
+  }, []);
 
   if (postsLoading) {
     return (
