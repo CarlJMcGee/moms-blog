@@ -11,6 +11,8 @@ import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const utils = trpc.useContext();
+  const refetchPosts = (): Promise<void> =>
+    utils.invalidateQueries("post.getAll");
   // state
   const { data: sess } = useSession();
   const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
@@ -25,20 +27,20 @@ const Home: NextPage = () => {
   const { BindEvent } = useChannel("main");
   useEffect(() => {
     BindEvent("added_post", () => {
-      utils.invalidateQueries("post.getAll");
+      refetchPosts();
     });
     BindEvent("added_comment", () => {
-      utils.invalidateQueries("post.getAll");
+      refetchPosts();
     });
     BindEvent("liked_post", () => {
-      utils.invalidateQueries("post.getAll");
+      refetchPosts();
     });
     BindEvent("unliked_post", () => {
-      utils.invalidateQueries("post.getAll");
+      refetchPosts();
     });
     BindEvent("updated_info", () => {
       utils.invalidateQueries("user.me");
-      utils.invalidateQueries("post.getAll");
+      refetchPosts();
     });
   }, []);
 
