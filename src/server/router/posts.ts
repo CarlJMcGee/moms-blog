@@ -192,4 +192,74 @@ export const PostRouter = createRouter()
         return `User unliked post`;
       }
     },
+  })
+  .query("getLikes", {
+    input: z.object({
+      postId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const Posts = ctx.prisma.post;
+      const { postId } = input;
+
+      try {
+        const post = await Posts.findUnique({
+          where: {
+            id: postId,
+          },
+          select: {
+            _count: {
+              select: {
+                userLikes: true,
+              },
+            },
+          },
+        });
+
+        if (!post || !post._count) {
+          throw new TRPCError({ code: "NOT_FOUND", message: `Post not found` });
+        }
+
+        return post._count!.userLikes;
+      } catch (err) {
+        if (err) console.error(err);
+      }
+    },
+  })
+  .query("getComments", {
+    input: z.object({
+      postId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const Posts = ctx.prisma.post;
+
+      try {
+        const post = await Posts.findUnique({
+          where: {
+            id: input.postId,
+          },
+          select: {
+            comments: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                  },
+                },
+              },
+              orderBy: { createdAt: "asc" },
+            },
+          },
+        });
+
+        if (!post) {
+          throw new TRPCError({ code: "NOT_FOUND", message: `post not found` });
+        }
+
+        return post.comments;
+      } catch (err) {
+        if (err) console.error(err);
+      }
+    },
   });
