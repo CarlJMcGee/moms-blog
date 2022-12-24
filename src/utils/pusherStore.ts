@@ -1,5 +1,7 @@
 import PusherClientBase, { Channel } from "pusher-js";
 import PusherServerBase, { Response } from "pusher";
+import { trpc } from "./trpc";
+import { array } from "zod";
 
 type channelEvt =
   | "added_post"
@@ -32,31 +34,49 @@ export const useChannel = (
     event: channelEvt,
     callback: (data: T) => any
   ) => Channel;
+  BindNRefetch: <T = void>(
+    events: channelEvt[],
+    refetchFnt: () => any
+  ) => Channel[];
 } => {
   const Subscription = pusherClient.subscribe(channel);
+
   function BindEvent<T = void>(
     event: string,
     callback: (data: T) => any
   ): Channel {
     return Subscription.bind(event, callback);
   }
-  return { Subscription, BindEvent };
+
+  function BindNRefetch<T = void>(
+    events: channelEvt[],
+    refetchFnt: () => any
+  ): Channel[] {
+    return events.map((e) => Subscription.bind(e, refetchFnt));
+  }
+
+  return { Subscription, BindEvent, BindNRefetch };
 };
 
 export async function triggerEvent<D = void>(
   channel: pusherChannels,
   event: channelEvt,
   data: D
-): Promise<Response>;
+): Promise<void>;
 export async function triggerEvent<D = void>(
   channel: string[],
   event: channelEvt,
   data: D
-): Promise<Response>;
+): Promise<void>;
 export async function triggerEvent<D = void>(
   channel: string | string[],
   event: channelEvt,
   data: D
-): Promise<Response> {
-  return pusherServer().trigger(channel, event, data);
+): Promise<void> {
+  if (Array.isArray(channel)) {
+    return channel.forEach((chan) => pusherServer().trigger(chan, event, data));
+  }
+
+  pusherServer().trigger(channel, event, data);
+  return;
 }

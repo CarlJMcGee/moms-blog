@@ -6,7 +6,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 
 import bcrypt from "bcrypt";
-import { toSeconds } from "../../../utils/time";
+import { toSeconds } from "@carljmcgee/timey-wimey";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session

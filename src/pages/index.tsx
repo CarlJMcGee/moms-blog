@@ -2,10 +2,11 @@ import { Button, Drawer, Group, Paper, Skeleton, Stack } from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "../components/header";
 import PostCard from "../components/post-cards";
 import PostForm from "../components/postForm";
+import { PostSkelly } from "../components/postSkellyten";
 import { useChannel } from "../utils/pusherStore";
 import { trpc } from "../utils/trpc";
 
@@ -24,72 +25,25 @@ const Home: NextPage = () => {
   ]);
 
   // pusher
-  const { BindEvent } = useChannel("main");
-  useEffect(() => {
-    BindEvent("added_post", () => {
+  const { BindNRefetch } = useChannel("main");
+  BindNRefetch(
+    [
+      "added_post",
+      "added_comment",
+      "liked_post",
+      "unliked_post",
+      "updated_info",
+    ],
+    () => {
       refetchPosts();
-    });
-    BindEvent("added_comment", () => {
-      refetchPosts();
-    });
-    BindEvent("liked_post", () => {
-      refetchPosts();
-    });
-    BindEvent("unliked_post", () => {
-      refetchPosts();
-    });
-    BindEvent("updated_info", () => {
-      utils.invalidateQueries("user.me");
-      refetchPosts();
-    });
-  }, []);
+    }
+  );
 
   if (postsLoading) {
     return (
       <>
         <Header sess={sess} />
-        <Group position="center" mt={100}>
-          <Stack>
-            <Paper
-              shadow={"md"}
-              radius={"sm"}
-              p={"md"}
-              withBorder
-              className="w-96 m-5"
-            >
-              <Stack>
-                <Skeleton height={10} width={300} mt={6} />
-                <Skeleton height={10} width={150} mt={6} />
-                <Skeleton height={10} width={350} mt={6} />
-                <Skeleton height={10} width={350} mt={6} />
-                <Skeleton height={300} width={350} my={20} />
-                <Skeleton height={10} width={300} mt={6} />
-                <Skeleton height={10} width={200} mt={6} />
-                <Skeleton height={10} width={300} mt={6} />
-                <Skeleton height={10} width={300} mt={6} />
-              </Stack>
-            </Paper>
-            <Paper
-              shadow={"md"}
-              radius={"sm"}
-              p={"md"}
-              withBorder
-              className="w-96 m-5"
-            >
-              <Stack>
-                <Skeleton height={10} width={300} mt={6} />
-                <Skeleton height={10} width={150} mt={6} />
-                <Skeleton height={10} width={350} mt={6} />
-                <Skeleton height={10} width={350} mt={6} />
-                <Skeleton height={300} width={350} my={20} />
-                <Skeleton height={10} width={300} mt={6} />
-                <Skeleton height={10} width={200} mt={6} />
-                <Skeleton height={10} width={300} mt={6} />
-                <Skeleton height={10} width={300} mt={6} />
-              </Stack>
-            </Paper>
-          </Stack>
-        </Group>
+        <PostSkelly />
       </>
     );
   }
