@@ -2,7 +2,7 @@ import { Button, Drawer, Group, Paper, Skeleton, Stack } from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/header";
 import PostCard from "../components/post-cards";
 import PostForm from "../components/postForm";
@@ -24,9 +24,12 @@ const Home: NextPage = () => {
 
   // pusher
   const { BindNRefetch } = useChannel("main");
-  BindNRefetch(["added_post", "updated_info"], () => {
-    utils.invalidateQueries(["post.getAll"]);
-  });
+
+  useEffect(() => {
+    BindNRefetch(["added_post", "updated_info"], () => {
+      utils.invalidateQueries(["post.getAll"]);
+    });
+  }, []);
 
   if (postsLoading) {
     return (
