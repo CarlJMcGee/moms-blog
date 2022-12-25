@@ -26,18 +26,9 @@ const Home: NextPage = () => {
 
   // pusher
   const { BindNRefetch } = useChannel("main");
-  BindNRefetch(
-    [
-      "added_post",
-      "added_comment",
-      "liked_post",
-      "unliked_post",
-      "updated_info",
-    ],
-    () => {
-      refetchPosts();
-    }
-  );
+  BindNRefetch(["added_post", "updated_info"], () => {
+    refetchPosts();
+  });
 
   if (postsLoading) {
     return (
