@@ -12,8 +12,6 @@ import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const utils = trpc.useContext();
-  const refetchPosts = (): Promise<void> =>
-    utils.invalidateQueries("post.getAll");
   // state
   const { data: sess } = useSession();
   const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
@@ -27,7 +25,7 @@ const Home: NextPage = () => {
   // pusher
   const { BindNRefetch } = useChannel("main");
   BindNRefetch(["added_post", "updated_info"], () => {
-    refetchPosts();
+    utils.invalidateQueries(["post.getAll"]);
   });
 
   if (postsLoading) {
