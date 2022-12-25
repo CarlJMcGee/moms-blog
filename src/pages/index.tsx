@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   // pusher
   const { BindNRefetch } = useChannel("main");
 
-  BindNRefetch(["added_post", "updated_info"], () => {
+  BindNRefetch(["added_post"], () => {
     console.log(`bind callback running`);
     utils.invalidateQueries(["post.getAll"]);
   });

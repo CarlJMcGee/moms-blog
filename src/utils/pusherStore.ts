@@ -1,7 +1,5 @@
 import PusherClientBase, { Channel } from "pusher-js";
-import PusherServerBase, { Response } from "pusher";
-import { trpc } from "./trpc";
-import { array } from "zod";
+import PusherServerBase from "pusher";
 
 type channelEvt =
   | "added_post"
@@ -50,7 +48,7 @@ export const useChannel = (
 
   function BindNRefetch<T = void>(
     events: channelEvt[],
-    refetchFnt: () => any
+    refetchFnt: (data: T) => any
   ): Channel[] {
     return events.map((e) => Subscription.bind(e, refetchFnt));
   }
