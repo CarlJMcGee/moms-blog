@@ -2,7 +2,7 @@ import { Button, Drawer, Group, Paper, Skeleton, Stack } from "@mantine/core";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/header";
 import PostCard from "../components/post-cards";
 import PostForm from "../components/postForm";
@@ -12,8 +12,6 @@ import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const utils = trpc.useContext();
-  const refetchPosts = (): Promise<void> =>
-    utils.invalidateQueries("post.getAll");
   // state
   const { data: sess } = useSession();
   const { data: user, isLoading: userLoading } = trpc.useQuery(["user.me"]);
@@ -23,21 +21,6 @@ const Home: NextPage = () => {
   const { data: posts, isLoading: postsLoading } = trpc.useQuery([
     "post.getAll",
   ]);
-
-  // pusher
-  const { BindNRefetch } = useChannel("main");
-  BindNRefetch(
-    [
-      "added_post",
-      "added_comment",
-      "liked_post",
-      "unliked_post",
-      "updated_info",
-    ],
-    () => {
-      refetchPosts();
-    }
-  );
 
   if (postsLoading) {
     return (

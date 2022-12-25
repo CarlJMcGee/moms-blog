@@ -12,6 +12,7 @@ import {
 import { useForm } from "@mantine/form";
 import { trpc } from "../../utils/trpc";
 import { ImgbbRes } from "../../types/imageUpload";
+import { useChannel } from "../../utils/pusherStore";
 
 export interface IPostFormProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,6 +51,14 @@ export default function PostForm({ setOpen }: IPostFormProps) {
       setFile(null);
       setOpen(false);
     },
+  });
+
+  // pusher
+  const { BindEvent } = useChannel("main");
+
+  BindEvent("added_post", () => {
+    utils.invalidateQueries(["post.getAll"]);
+    console.log(`test`);
   });
 
   // handlers
