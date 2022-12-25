@@ -19,6 +19,7 @@ export const pusherServer = () =>
     useTLS: true,
   });
 
+PusherClientBase.logToConsole = true;
 export const pusherClient = new PusherClientBase("8800cf5b24ddc5c1c620", {
   cluster: "us2",
   forceTLS: true,
