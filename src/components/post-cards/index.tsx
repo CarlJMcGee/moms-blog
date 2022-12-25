@@ -44,8 +44,8 @@ const PostCard = ({ post, sess }: IPostCardProps) => {
 
   // pusher
   const { BindNRefetch } = useChannel("main");
-  BindNRefetch(["added_comment"], () => {
-    utils.invalidateQueries("post.getComments");
+  BindNRefetch(["added_comment"], async () => {
+    await utils.invalidateQueries("post.getComments");
   });
 
   if (!post) {
