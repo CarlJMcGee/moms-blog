@@ -29,7 +29,7 @@ const Home: NextPage = () => {
     BindNRefetch(["added_post", "updated_info"], () => {
       utils.invalidateQueries(["post.getAll"]);
     });
-  }, []);
+  });
 
   if (postsLoading) {
     return (
