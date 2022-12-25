@@ -61,21 +61,20 @@ export async function triggerEvent<D = void>(
   channel: pusherChannels,
   event: channelEvt,
   data: D
-): Promise<void>;
+): Promise<PusherServerBase.Response>;
 export async function triggerEvent<D = void>(
   channel: string[],
   event: channelEvt,
   data: D
-): Promise<void>;
+): Promise<PusherServerBase.Response>;
 export async function triggerEvent<D = void>(
   channel: string | string[],
   event: channelEvt,
   data: D
-): Promise<void> {
+): Promise<PusherServerBase.Response | Promise<PusherServerBase.Response>[]> {
   if (Array.isArray(channel)) {
-    return channel.forEach((chan) => pusherServer().trigger(chan, event, data));
+    return channel.map((chan) => pusherServer().trigger(chan, event, data));
   }
 
-  pusherServer().trigger(channel, event, data);
-  return;
+  return pusherServer().trigger(channel, event, data);
 }
