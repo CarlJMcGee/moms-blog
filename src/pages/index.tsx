@@ -22,14 +22,6 @@ const Home: NextPage = () => {
     "post.getAll",
   ]);
 
-  // pusher
-  const { BindNRefetch, BindEvent } = useChannel("main");
-
-  BindEvent("added_post", () => {
-    console.log(`bind callback running`);
-    utils.invalidateQueries(["post.getAll"]);
-  });
-
   if (postsLoading) {
     return (
       <>

@@ -58,6 +58,7 @@ export default function PostForm({ setOpen }: IPostFormProps) {
 
   BindEvent("added_post", () => {
     utils.invalidateQueries(["post.getAll"]);
+    console.log(`test`);
   });
 
   // handlers
